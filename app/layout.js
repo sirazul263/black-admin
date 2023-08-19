@@ -1,6 +1,7 @@
 import "./globals.css";
 import { Ubuntu } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
+import "react-modern-drawer/dist/index.css";
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],

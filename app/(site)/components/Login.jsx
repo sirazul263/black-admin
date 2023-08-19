@@ -10,8 +10,10 @@ import {
 } from "react-icons/ai";
 import { Button } from "bootstrap";
 import { Spinner } from "react-bootstrap";
+import { useRouter } from "next/navigation";
 
 const Login = ({ setShowForgetPassword }) => {
+  const router = useRouter();
   //States
   const validate = Yup.object({
     phone: Yup.string()
@@ -35,14 +37,15 @@ const Login = ({ setShowForgetPassword }) => {
             }}
             validationSchema={validate}
             onSubmit={async (values) => {
-              const res = await commonLogin(values, setLoading);
-              if (res.status === 1) {
-                router.reload(window.location.pathname);
-              } else if (typeof res.msg === "object") {
-                setLoginError(Object.values(res.msg)[0][0]);
-              } else {
-                setLoginError(res.msg);
-              }
+              router.push("/dashboard");
+              // const res = await commonLogin(values, setLoading);
+              // if (res.status === 1) {
+              //   router.reload(window.location.pathname);
+              // } else if (typeof res.msg === "object") {
+              //   setLoginError(Object.values(res.msg)[0][0]);
+              // } else {
+              //   setLoginError(res.msg);
+              // }
             }}
           >
             {(formik) => (

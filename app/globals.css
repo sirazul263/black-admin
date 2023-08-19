@@ -12,12 +12,17 @@ body:root {
 .primary-color {
   color: #fcd800;
 }
-
+.text-clr-gray {
+  color: #637381;
+}
 .bg-clr-primary {
   background-color: #fcd800;
 }
 .fw-semi-bold {
   font-weight: 500;
+}
+.fs-10 {
+  font-size: 10px;
 }
 .fs-12 {
   font-size: 12px;
@@ -122,4 +127,136 @@ input {
   outline: 0 !important;
   -webkit-box-shadow: none !important;
   box-shadow: none !important;
+}
+
+/* //OTP */
+
+.otp-input input {
+  border: 1px solid #e4e4e4 !important;
+  background: none;
+  border-radius: 0.4rem;
+}
+@media (min-width: 480px) {
+  .otp-input input {
+    width: 40px !important;
+    height: 40px !important;
+    padding: 0.9rem 0.5rem !important;
+  }
+}
+.otp-timer {
+  height: 40px;
+  width: 40px;
+  border-radius: 50%;
+  border: 2px solid #fcd800;
+}
+.menu-active {
+  background-color: #fffade;
+  border-radius: 8px;
+  color: #000;
+}
+.custom-select select,
+.custom-select select:focus {
+  color: #919eab;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.custom-select select:focus > option:checked {
+  background-color: #fcd800 !important;
+  color: #fff;
+  box-shadow: 0 0 10px 100px #000 inset !important;
+}
+.search-box .form-control {
+  height: 42px;
+  font-size: 14px;
+  color: #919eab;
+  margin-top: -3px;
+}
+/* Updated React Table */
+.order-table table {
+  width: 100%;
+}
+
+.order-table table th {
+  font-size: 12px;
+  text-align: start;
+  font-weight: 600;
+  padding: 16px 10px;
+  color: #637381;
+  white-space: nowrap;
+}
+
+.order-table th:nth-child(even),
+.order-table th:nth-child(odd) {
+  background: #f4f6f8;
+  border-radius: 3px;
+}
+
+.order-table table td {
+  font-size: 12px;
+  padding: 0px 10px;
+  color: #637381;
+  font-weight: 500;
+  border-bottom: 10px solid #f4f6f8;
+  white-space: nowrap;
+}
+.paginationBtn {
+  list-style: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.paginationBtn a {
+  color: #666666;
+  padding: 8px 12px;
+  margin: 0 5px;
+  border-radius: 12px;
+  font-weight: bold;
+  font-size: 14px;
+}
+.paginationBtn a:hover {
+  color: #56606d !important;
+  background-color: #fde8eb;
+  border-color: none;
+}
+.paginationActiveBtn a {
+  color: #fcd800 !important;
+  outline: 0;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background-color: rgba(95, 95, 95, 0.08);
+}
+@media (max-width: 780px) {
+  .paginationBtn a {
+    padding: 4px 8px;
+    font-size: 12px;
+  }
+}
+
+.previousBtn {
+  padding: 8px 10px !important;
+}
+.nextBtn {
+  padding: 8px 10px !important;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #888;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
 }

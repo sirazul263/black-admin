@@ -5,7 +5,7 @@ import { Formik, Form } from "formik";
 import { useState } from "react";
 import { Spinner } from "react-bootstrap";
 import * as Yup from "yup";
-const ForgetPassword = ({ setShowForgetPassword }) => {
+const ForgetPassword = ({ setShowForgetPassword, setShowOtp }) => {
   //States
   const validate = Yup.object({
     phone: Yup.string()
@@ -31,7 +31,9 @@ const ForgetPassword = ({ setShowForgetPassword }) => {
               phone: "",
             }}
             validationSchema={validate}
-            onSubmit={async (values) => {}}
+            onSubmit={async (values) => {
+              setShowOtp(true);
+            }}
           >
             {(formik) => (
               <Form>

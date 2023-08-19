@@ -1,18 +1,48 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import dynamic from "next/dynamic";
 const Login = dynamic(() => import("./Login"), { ssr: false });
 const ForgetPassword = dynamic(() => import("./ForgetPassword"), {
   ssr: false,
 });
+const OtpMain = dynamic(() => import("./OtpMain"), {
+  ssr: false,
+});
+const ResetPassword = dynamic(() => import("./ResetPassword"), {
+  ssr: false,
+});
 
 const LoginMain = () => {
   const [showForgetPassword, setShowForgetPassword] = useState(false);
+  const [showOtp, setShowOtp] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   return (
     <div>
       {showForgetPassword ? (
-        <ForgetPassword setShowForgetPassword={setShowForgetPassword} />
+        <>
+          {showPassword ? (
+            <ResetPassword
+              setShowForgetPassword={setShowForgetPassword}
+              setShowPassword={setShowPassword}
+            />
+          ) : (
+            <>
+              {showOtp ? (
+                <OtpMain
+                  setShowOtp={setShowOtp}
+                  setShowPassword={setShowPassword}
+                  setShowForgetPassword={setShowForgetPassword}
+                />
+              ) : (
+                <ForgetPassword
+                  setShowForgetPassword={setShowForgetPassword}
+                  setShowOtp={setShowOtp}
+                />
+              )}
+            </>
+          )}
+        </>
       ) : (
         <Login setShowForgetPassword={setShowForgetPassword} />
       )}
