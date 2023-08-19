@@ -212,11 +212,7 @@ export const COLUMNS = [
         <div className="d-flex justify-content-between align-items-center">
           <div className="custom-select" style={{ minWidth: 120 }}>
             <div>
-              <select
-                className="form-select form-control text-clr-gray fs-12 "
-                onChange={(e) => handleStatus(e.target.value)}
-                value={status}
-              >
+              <select className="form-select form-control text-clr-gray fs-12 ">
                 <option value="">Status</option>
                 <option value="confirmed">Confirmed</option>
                 <option value="cancelled">Cancelled</option>
