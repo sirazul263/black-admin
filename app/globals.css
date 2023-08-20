@@ -16,7 +16,10 @@ body:root {
   color: #637381;
 }
 .bg-clr-primary {
-  background-color: #fcd800;
+  background-color: #fcd800 !important;
+}
+.bg-clr-ash {
+  background-color: #f3f3f3;
 }
 .fw-semi-bold {
   font-weight: 500;
@@ -156,10 +159,20 @@ input {
 }
 .custom-select select,
 .custom-select select:focus {
-  color: #919eab;
-  padding: 10px;
-  font-size: 14px;
-  font-weight: 400;
+  -webkit-appearance: none !important;
+  -moz-appearance: none !important;
+  background: transparent;
+  background-image: url("../public/img/arrow-down.svg");
+  background-repeat: no-repeat;
+  background-position-y: 20px !important;
+  border-radius: 5px;
+  margin-right: 2rem;
+  padding: 0.5rem 1rem;
+  padding-right: 2rem;
+  background-position-x: 95% !important;
+  color: #000;
+  font-size: 14px !important;
+  font-weight: 500 !important;
 }
 
 .custom-select select:focus > option:checked {
@@ -259,4 +272,22 @@ input {
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
   background: #555;
+}
+
+.offcanvas {
+  width: 100% !important;
+}
+@media (min-width: 968px) {
+  .offcanvas {
+    width: 45% !important;
+  }
+}
+
+.product-form .form-control {
+  height: 48px;
+  border: 1px solid #f3f3f3;
+  -webkit-box-shadow: none;
+  box-shadow: none;
+  background-color: #f3f3f3;
+  font-size: 14px;
 }

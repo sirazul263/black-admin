@@ -194,20 +194,12 @@ export const COLUMNS = [
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      const { row, setShowModal, setSelected, setShowView } = props;
-      const handleStatus = () => {
+      const { row, setShowModal, setSelected } = props;
+      const handleUpdate = () => {
         setShowModal(true);
         setSelected(row.original);
       };
-
-      //Viewing
-      const handleView = () => {
-        setShowView(true);
-        setSelected(row.original);
-      };
-
       let iconStyles = { color: "#C4C4C4", fontSize: 20 };
-
       return (
         <div className="d-flex justify-content-between align-items-center">
           <div className="custom-select" style={{ minWidth: 120 }}>
@@ -219,7 +211,10 @@ export const COLUMNS = [
               </select>
             </div>
           </div>
-          <div className="text-muted cursor-pointer ms-4">
+          <div
+            className="text-muted cursor-pointer ms-4"
+            onClick={handleUpdate}
+          >
             <FaEdit style={iconStyles} />
           </div>
         </div>
