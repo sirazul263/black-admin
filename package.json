@@ -23,6 +23,7 @@
     "react-bootstrap-sweetalert": "^5.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
+    "react-images-uploading": "^3.1.7",
     "react-loader-spinner": "^5.3.4",
     "react-modal": "^3.16.1",
     "react-modern-drawer": "^1.2.2",

@@ -3,7 +3,7 @@ import React from "react";
 const SelectField = ({ label, notRequired, options, ...props }) => {
   const [field, meta] = useField(props);
   return (
-    <div className="form-group custom-select">
+    <div className="form-group custom-select2">
       {label && (
         <label
           htmlFor={field.name}

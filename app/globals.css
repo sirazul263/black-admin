@@ -36,6 +36,9 @@ body:root {
 .fs-14 {
   font-size: 14px;
 }
+.fs-16 {
+  font-size: 16px;
+}
 .fs-18 {
   font-size: 18px;
 }
@@ -157,8 +160,23 @@ input {
   border-radius: 8px;
   color: #000;
 }
+
 .custom-select select,
 .custom-select select:focus {
+  color: #919eab;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.custom-select select:focus > option:checked {
+  background-color: #fcd800 !important;
+  color: #fff;
+  box-shadow: 0 0 10px 100px #000 inset !important;
+}
+
+.custom-select2 select,
+.custom-select2 select:focus {
   -webkit-appearance: none !important;
   -moz-appearance: none !important;
   background: transparent;
@@ -175,7 +193,7 @@ input {
   font-weight: 500 !important;
 }
 
-.custom-select select:focus > option:checked {
+.custom-select2 select:focus > option:checked {
   background-color: #fcd800 !important;
   color: #fff;
   box-shadow: 0 0 10px 100px #000 inset !important;
@@ -186,7 +204,7 @@ input {
   color: #919eab;
   margin-top: -3px;
 }
-/* Updated React Table */
+/* Order  Table */
 .order-table table {
   width: 100%;
 }
@@ -214,6 +232,47 @@ input {
   border-bottom: 10px solid #f4f6f8;
   white-space: nowrap;
 }
+
+/* Product Table */
+.product-table table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 14px;
+}
+
+.product-table table th {
+  font-size: 12px;
+  text-align: start;
+  font-weight: 400;
+  padding: 16px 10px;
+  color: #637381;
+  white-space: nowrap;
+}
+
+.product-table th:nth-child(even),
+.product-table th:nth-child(odd) {
+  background: #f4f6f8;
+  border-radius: 3px;
+}
+
+.product-table table td {
+  font-size: 12px;
+  padding: 5px 10px;
+  color: #000;
+  font-weight: 500;
+  border-top: 1px solid #c4c4c4;
+  border-bottom: 1px solid #c4c4c4;
+  white-space: nowrap;
+}
+
+.product-table td:first-child {
+  border-left: 1px solid #c4c4c4;
+}
+
+.product-table td:last-child {
+  border-right: 1px solid #c4c4c4;
+}
+/* pagination */
 .paginationBtn {
   list-style: none;
   display: flex;
@@ -290,4 +349,9 @@ input {
   box-shadow: none;
   background-color: #f3f3f3;
   font-size: 14px;
+}
+
+.file-upload-btn {
+  border: 1px dashed #dce0e4;
+  max-width: 100px;
 }
