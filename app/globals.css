@@ -107,7 +107,8 @@ input {
 .login-form .form-control#password {
   background-image: url("../public/img/password.svg");
 }
-.login-form .form-control#confirm_password {
+.login-form .form-control#confirm_password,
+.login-form .form-control#current_password {
   background-image: url("../public/img/password.svg");
 }
 .password .pass-show-hide {
@@ -271,6 +272,34 @@ input {
 
 .product-table td:last-child {
   border-right: 1px solid #c4c4c4;
+}
+
+/* Order  Table */
+.offer-table table {
+  width: 100%;
+}
+
+.offer-table table th {
+  font-size: 12px;
+  text-align: start;
+  font-weight: 500;
+  padding: 16px 10px;
+  color: #637381;
+  white-space: nowrap;
+}
+
+.offer-table th:nth-child(even),
+.offer-table th:nth-child(odd) {
+  background: #f4f6f8;
+  border-radius: 3px;
+}
+
+.offer-table table td {
+  font-size: 12px;
+  padding: 10px 10px;
+  color: #637381;
+  font-weight: 500;
+  white-space: nowrap;
 }
 /* pagination */
 .paginationBtn {

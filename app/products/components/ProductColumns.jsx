@@ -102,14 +102,14 @@ export const COLUMNS = [
     },
   },
   {
-    Header: "Status",
-    Footer: "Status",
+    Header: "STATUS",
+    Footer: "STATUS",
     accessor: "status",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
       return (
-        <div className="bg-success radius-16 text-white px-3 py-1 fs-10">
+        <div className="bg-success radius-16 text-white ps-3 py-1 fs-10">
           {props.value}
         </div>
       );

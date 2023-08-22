@@ -172,21 +172,7 @@ const Sidebar = ({ page }) => {
                 <p className="mb-0 ">Categories</p>
               </div>
             </div>
-            <div
-              className={
-                page === "images"
-                  ? "d-flex cursor-pointer fw-bold py-3 px-4 menu-active "
-                  : "d-flex cursor-pointer py-3 px-4 "
-              }
-              onClick={() => router.push("/images")}
-            >
-              <div>
-                <BsFillImageFill size={20} />
-              </div>
-              <div className="ms-3 pt-6">
-                <p className="mb-0 ">Images</p>
-              </div>
-            </div>
+
             <div
               className={
                 page === "offers"
@@ -202,6 +188,22 @@ const Sidebar = ({ page }) => {
                 <p className="mb-0 ">Offers</p>
               </div>
             </div>
+            <div
+              className={
+                page === "images"
+                  ? "d-flex cursor-pointer fw-bold py-3 px-4 menu-active "
+                  : "d-flex cursor-pointer py-3 px-4 "
+              }
+              onClick={() => router.push("/images")}
+            >
+              <div>
+                <BsFillImageFill size={20} />
+              </div>
+              <div className="ms-3 pt-6">
+                <p className="mb-0 ">Images</p>
+              </div>
+            </div>
+
             <div
               className={
                 page === "others"
