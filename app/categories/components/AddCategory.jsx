@@ -4,11 +4,20 @@ import { useState } from "react";
 import Offcanvas from "react-bootstrap/Offcanvas";
 import { Formik, Form } from "formik";
 import * as Yup from "yup";
-import SelectField from "@/app/UI/SelectField";
-import TextArea from "@/app/UI/TextArea";
 import PhotoUploader from "@/app/UI/PhotoUploader";
+import { addCategory, updateCategory } from "@/services/categoryServices";
+import { AiOutlineExclamationCircle } from "react-icons/ai";
+import { Button, Spinner } from "react-bootstrap";
 
-const AddCategory = ({ show, setShow, data, type }) => {
+const AddCategory = ({
+  show,
+  setShow,
+  data,
+  token,
+  type,
+  updated,
+  setUpdated,
+}) => {
   const handleClose = () => setShow(false);
 
   //States
@@ -21,6 +30,8 @@ const AddCategory = ({ show, setShow, data, type }) => {
   const _imageUpload = async (imageList, addUpdateIndex) => {
     setImage(imageList);
   };
+
+  const [error, setError] = useState(null);
 
   return (
     <div>
@@ -56,18 +67,29 @@ const AddCategory = ({ show, setShow, data, type }) => {
             <div className="product-form fw-semi-bold  py-4 px-1 fs-14">
               <Formik
                 initialValues={{
-                  category_name: "",
+                  category_name: data ? data.name : "",
                 }}
                 validationSchema={validate}
                 onSubmit={async (values) => {
-                  // const res = await commonLogin(values, setLoading);
-                  // if (res.status === 1) {
-                  //   router.reload(window.location.pathname);
-                  // } else if (typeof res.msg === "object") {
-                  //   setLoginError(Object.values(res.msg)[0][0]);
-                  // } else {
-                  //   setLoginError(res.msg);
-                  // }
+                  const form = new FormData();
+                  form.append("name", values.category_name);
+                  for (let i = 0; i < image.length; i++) {
+                    form.append(`images[${i}]`, image[i].file);
+                  }
+                  const res = data
+                    ? await updateCategory(form, token, data.id, setLoading)
+                    : await addCategory(form, token, setLoading);
+                  if (
+                    !res.hasOwnProperty("errors") &&
+                    !res.hasOwnProperty("message")
+                  ) {
+                    setUpdated(!updated);
+                    setShow(false);
+                  } else if (typeof res.errors === "object") {
+                    setError(Object.values(res.errors)[0][0]);
+                  } else {
+                    setError(res.message);
+                  }
                 }}
               >
                 {(formik) => (
@@ -100,31 +122,20 @@ const AddCategory = ({ show, setShow, data, type }) => {
                         <PhotoUploader onChange={_imageUpload} images={image} />
                       </div>
                     </div>
-
+                    {error && (
+                      <p className="text-danger fs-14  text-center">
+                        <AiOutlineExclamationCircle /> {error}
+                      </p>
+                    )}
                     <div className="row mt-3">
                       <div className="col-md-6 mb-3">
-                        {loading ? (
-                          <Button
-                            disabled
-                            className="loading-button d-flex align-items-center justify-content-center w-100  "
-                          >
-                            <Spinner
-                              as="span"
-                              animation="grow"
-                              size="md"
-                              role="status"
-                              aria-hidden="true"
-                            />
-                            <span className="ms-3"> Loading...</span>
-                          </Button>
-                        ) : (
-                          <button
-                            className="primary-btn py-md fs-14 text-danger bg-transparent is-radius-5 w-100"
-                            type="button"
-                          >
-                            <span className="pe-1">Cancel</span>
-                          </button>
-                        )}
+                        <button
+                          className="primary-btn py-md fs-14 text-danger bg-transparent is-radius-5 w-100"
+                          type="button"
+                          onClick={() => setShow(false)}
+                        >
+                          <span className="pe-1">Cancel</span>
+                        </button>
                       </div>
                       <div className="col-md-6">
                         {loading ? (

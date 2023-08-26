@@ -1,11 +1,13 @@
 "use client";
 import { useState } from "react";
 import CategoryList from "./CategoryList";
-const data = require("../../api/data/dummy.json");
+import { useEffect } from "react";
+import { getCategories } from "@/services/categoryServices";
+import Loader from "@/app/components/Loader";
 
-const CategoryMain = () => {
+const CategoryMain = ({ token }) => {
   //Fetching Data
-  const [result, setResult] = useState(data);
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [updated, setUpdated] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
@@ -17,19 +19,38 @@ const CategoryMain = () => {
     setUpdated(!updated);
   };
 
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const categories = await getCategories(token, setLoading);
+      setResult(categories);
+    };
+    fetchCategories();
+  }, [updated]);
+
   return (
     <div className="px-4 py-3">
-      <CategoryList
-        handleSearch={handleSearch}
-        inputText={inputText}
-        setInputText={setInputText}
-        //Result Section
-        result={result}
-        updated={updated}
-        setUpdated={setUpdated}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-      />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          {result && result.length > 0 ? (
+            <CategoryList
+              handleSearch={handleSearch}
+              inputText={inputText}
+              setInputText={setInputText}
+              //Result Section
+              result={result}
+              updated={updated}
+              setUpdated={setUpdated}
+              pageNumber={pageNumber}
+              setPageNumber={setPageNumber}
+              token={token}
+            />
+          ) : (
+            <></>
+          )}
+        </>
+      )}
     </div>
   );
 };

@@ -11,6 +11,7 @@ const CategoryList = ({
   setUpdated,
   pageNumber,
   setPageNumber,
+  token,
 }) => {
   const [showModal, setShowModal] = useState(false);
   return (
@@ -66,10 +67,18 @@ const CategoryList = ({
           pageNumber={pageNumber}
           setPageNumber={setPageNumber}
           total={result.length}
+          token={token}
         />
       </div>
 
-      <AddCategory show={showModal} setShow={setShowModal} type={"Add"} />
+      <AddCategory
+        show={showModal}
+        setShow={setShowModal}
+        type={"Add"}
+        updated={updated}
+        setUpdated={setUpdated}
+        token={token}
+      />
     </div>
   );
 };

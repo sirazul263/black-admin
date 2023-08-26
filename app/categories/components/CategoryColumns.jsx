@@ -13,22 +13,23 @@ export const COLUMNS = [
     sticky: "left",
     style: { overflow: "visible", minWidth: 250 },
     Cell: (props) => {
-      return <span>1E2C47</span>;
+      return <span>{props.value}</span>;
     },
   },
   {
     Header: "ICON",
     Footer: "ICON",
-    accessor: "created_at",
+    accessor: "image_urls",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
       return (
         <div>
           <img
-            src="../img/table-product.svg"
+            src={props.value[0]}
             alt="logo"
             className="img-fluid"
+            style={{ maxHeight: 35, width: 40 }}
           />
         </div>
       );
@@ -37,7 +38,7 @@ export const COLUMNS = [
   {
     Header: "CATEGORY NAME",
     Footer: "CATEGORY NAME",
-    accessor: "full_name",
+    accessor: "name",
     disableSortBy: true,
     sticky: "left",
   },

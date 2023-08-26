@@ -1,16 +1,16 @@
 "use client";
 import TextInput from "@/app/UI/TextInput";
 import { Formik, Form } from "formik";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import * as Yup from "yup";
 import {
   AiFillEyeInvisible,
   AiFillEye,
   AiOutlineExclamationCircle,
 } from "react-icons/ai";
-import { Button } from "bootstrap";
-import { Spinner } from "react-bootstrap";
+import { Spinner, Button } from "react-bootstrap";
 import { useRouter } from "next/navigation";
+import { login } from "@/services/authServices";
 
 const Login = ({ setShowForgetPassword }) => {
   const router = useRouter();
@@ -37,15 +37,19 @@ const Login = ({ setShowForgetPassword }) => {
             }}
             validationSchema={validate}
             onSubmit={async (values) => {
-              router.push("/dashboard");
-              // const res = await commonLogin(values, setLoading);
-              // if (res.status === 1) {
-              //   router.reload(window.location.pathname);
-              // } else if (typeof res.msg === "object") {
-              //   setLoginError(Object.values(res.msg)[0][0]);
-              // } else {
-              //   setLoginError(res.msg);
-              // }
+              const data = {
+                email: "admin@gmail.com",
+                password: values.password,
+              };
+              const res = await login(data, setLoading);
+
+              if (res.hasOwnProperty("token")) {
+                router.push("/dashboard");
+              } else if (typeof res.error === "object") {
+                setLoginError(Object.values(res.error)[0][0]);
+              } else {
+                setLoginError(res.error);
+              }
             }}
           >
             {(formik) => (

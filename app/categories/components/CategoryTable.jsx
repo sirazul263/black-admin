@@ -12,6 +12,7 @@ const CategoryTable = ({
   pageNumber,
   setPageNumber,
   total,
+  token,
 }) => {
   const columns = useMemo(() => COLUMNS, []);
   const [selected, setSelected] = useState(null);
@@ -206,6 +207,9 @@ const CategoryTable = ({
         setShow={setShowModal}
         data={selected}
         type={"Update"}
+        token={token}
+        updated={updated}
+        setUpdated={setUpdated}
       />
     </div>
   );
