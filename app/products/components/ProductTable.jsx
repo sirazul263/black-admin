@@ -4,8 +4,10 @@ import { usePagination, useSortBy, useTable } from "react-table";
 import Form from "react-bootstrap/Form";
 import { COLUMNS } from "./ProductColumns";
 import AddProduct from "./AddProduct";
+import DeleteModal from "@/app/components/Modal/DeleteModal";
 
 const ProductTable = ({
+  token,
   data,
   updated,
   setUpdated,
@@ -16,6 +18,7 @@ const ProductTable = ({
   const columns = useMemo(() => COLUMNS, []);
   const [selected, setSelected] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showDelete, setShowDelete] = useState(false);
   const {
     getTableProps,
     getTableBodyProps,
@@ -30,6 +33,7 @@ const ProductTable = ({
       data,
       setShowModal,
       setSelected,
+      setShowDelete,
     },
     useSortBy,
     usePagination
@@ -201,12 +205,27 @@ const ProductTable = ({
           </div>
         </div>
       </div>
-      <AddProduct
-        show={showModal}
-        setShow={setShowModal}
-        data={selected}
-        type={"Update"}
-      />
+      {showModal && (
+        <AddProduct
+          show={showModal}
+          setShow={setShowModal}
+          data={selected}
+          type={"Update"}
+          token={token}
+          updated={updated}
+          setUpdated={setUpdated}
+        />
+      )}
+      {showModal && (
+        <DeleteModal
+          show={showDelete}
+          setShow={setShowDelete}
+          data={selected}
+          token={token}
+          updated={updated}
+          setUpdated={setUpdated}
+        />
+      )}
     </div>
   );
 };

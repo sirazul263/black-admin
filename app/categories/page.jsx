@@ -2,7 +2,6 @@ import protectedPage from "@/helpers/auth";
 import Layout from "../components/Layout";
 import CategoryMain from "./components/CategoryMain";
 import { cookies } from "next/headers";
-import { getCategories } from "@/services/categoryServices";
 
 export default async function Categories() {
   protectedPage();

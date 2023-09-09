@@ -2,11 +2,13 @@
 
 import { useState } from "react";
 import OrderList from "./OrderList";
-const data = require("../../api/data/dummy.json");
+import Loader from "@/app/components/Loader";
+import { useEffect } from "react";
+import { getOrders } from "@/services/orderServices";
 
-const OrderMain = () => {
+const OrderMain = ({ token }) => {
   //Fetching Data
-  const [result, setResult] = useState(data);
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [updated, setUpdated] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
@@ -24,6 +26,14 @@ const OrderMain = () => {
     setPageNumber(0);
     setUpdated(!updated);
   };
+
+  useEffect(() => {
+    const fetchOrders = async () => {
+      const orders = await getOrders(token, setLoading);
+      setResult(orders);
+    };
+    fetchOrders();
+  }, [updated]);
   return (
     <div className="px-4 py-3">
       <div className="row ">
@@ -98,19 +108,34 @@ const OrderMain = () => {
           </div>
         </div>
       </div>
-      <OrderList
-        status={status}
-        handleSearch={handleSearch}
-        handleStatus={handleStatus}
-        inputText={inputText}
-        setInputText={setInputText}
-        //Result Section
-        result={result}
-        updated={updated}
-        setUpdated={setUpdated}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-      />
+
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          {result && result.length > 0 ? (
+            <OrderList
+              status={status}
+              handleSearch={handleSearch}
+              handleStatus={handleStatus}
+              inputText={inputText}
+              setInputText={setInputText}
+              //Result Section
+              result={result}
+              updated={updated}
+              setUpdated={setUpdated}
+              pageNumber={pageNumber}
+              setPageNumber={setPageNumber}
+            />
+          ) : (
+            <>
+              <p className="mt-5 text-center fw-bold fs-24">
+                No results found !
+              </p>
+            </>
+          )}
+        </>
+      )}
     </div>
   );
 };

@@ -13,22 +13,23 @@ export const COLUMNS = [
     sticky: "left",
     style: { overflow: "visible", minWidth: 250 },
     Cell: (props) => {
-      return <span>1E2C47</span>;
+      return <span>{props.value}</span>;
     },
   },
   {
     Header: "IMAGE",
     Footer: "IMAGE",
-    accessor: "created_at",
+    accessor: "image_urls",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
       return (
         <div>
           <img
-            src="../img/table-product.svg"
+            src={props.value[0]}
             alt="logo"
             className="img-fluid"
+            style={{ maxHeight: 35, width: 40 }}
           />
         </div>
       );
@@ -37,7 +38,7 @@ export const COLUMNS = [
   {
     Header: "PRODUCT NAME",
     Footer: "PRODUCT NAME",
-    accessor: "full_name",
+    accessor: "name",
     disableSortBy: true,
     sticky: "left",
   },
@@ -63,7 +64,7 @@ export const COLUMNS = [
   {
     Header: "CATEGORY",
     Footer: "CATEGORY",
-    accessor: "address",
+    accessor: "category_id",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
@@ -74,21 +75,21 @@ export const COLUMNS = [
   {
     Header: "BUY PRICE",
     Footer: "BUY PRICE",
-    accessor: "products",
+    accessor: "buy_price",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      return <div>280</div>;
+      return <div>{props.value}</div>;
     },
   },
   {
     Header: "SELL PRICE",
     Footer: "SELL PRICE",
-    accessor: "sell",
+    accessor: "sell_price",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      return <div>300</div>;
+      return <div>{props.value}</div>;
     },
   },
   {
@@ -98,7 +99,10 @@ export const COLUMNS = [
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      return <div>70</div>;
+      const data = props.row.original;
+      const total = data.variations.reduce((a, c) => a + c.quantity, 0);
+
+      return <div>{total}</div>;
     },
   },
   {
@@ -118,11 +122,11 @@ export const COLUMNS = [
   {
     Header: "DISCOUNT",
     Footer: "DISCOUNT",
-    accessor: "track_id",
+    accessor: "offered_price",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      return <div className="">10</div>;
+      return <div className="">{props.value}</div>;
     },
   },
 
@@ -172,9 +176,14 @@ export const COLUMNS = [
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      const { row, setShowModal, setSelected } = props;
+      const { row, setShowModal, setSelected, setShowDelete } = props;
       const handleUpdate = () => {
         setShowModal(true);
+        setSelected(row.original);
+      };
+
+      const handleDelete = () => {
+        setShowDelete(true);
         setSelected(row.original);
       };
       let iconStyles = { color: "#C4C4C4", fontSize: 20 };
@@ -184,7 +193,11 @@ export const COLUMNS = [
             <FaEdit style={iconStyles} />
           </div>
           <div>
-            <FiTrash2 style={iconStyles} />
+            <FiTrash2
+              style={iconStyles}
+              className="cursor-pointer"
+              onClick={handleDelete}
+            />
           </div>
         </div>
       );

@@ -7,8 +7,20 @@ import * as Yup from "yup";
 import SelectField from "@/app/UI/SelectField";
 import TextArea from "@/app/UI/TextArea";
 import PhotoUploader from "@/app/UI/PhotoUploader";
+import { addProduct, updateProduct } from "@/services/productServices";
+import { getCategories, getSubCategories } from "@/services/categoryServices";
+import { useEffect } from "react";
+import { Spinner, Button } from "react-bootstrap";
 
-const AddProduct = ({ show, setShow, data, type }) => {
+const AddProduct = ({
+  show,
+  setShow,
+  data,
+  updated,
+  setUpdated,
+  type,
+  token,
+}) => {
   const handleClose = () => setShow(false);
 
   //States
@@ -39,17 +51,6 @@ const AddProduct = ({ show, setShow, data, type }) => {
     { name: "XS", value: "XS" },
   ];
 
-  const category = [
-    {
-      name: "Bag",
-      value: "bag",
-    },
-    {
-      name: "Shoe",
-      value: "Shoe",
-    },
-  ];
-
   const [image, setImage] = useState([]);
   const _imageUpload = async (imageList, addUpdateIndex) => {
     setImage(imageList);
@@ -63,6 +64,46 @@ const AddProduct = ({ show, setShow, data, type }) => {
       quantity: "",
     });
   }
+
+  const [category, setCategory] = useState(null);
+  const [categoryLoading, setCategoryLoading] = useState(false);
+
+  const [subCategory, setSubCategory] = useState(null);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      const categories = await getCategories(token, setCategoryLoading);
+      setCategory(categories);
+    };
+
+    const fetchSubCategories = async () => {
+      const subCategories = await getSubCategories(token);
+      setSubCategory(subCategories);
+    };
+    fetchCategories();
+    fetchSubCategories();
+  }, []);
+
+  const categoryOptions = [];
+  if (category && category.length > 0) {
+    for (let i = 0; i < category.length; i++) {
+      categoryOptions.push({
+        name: category[i].name,
+        value: category[i].id,
+      });
+    }
+  }
+
+  const subCategoryOptions = [];
+  if (subCategory && subCategory.length > 0) {
+    for (let i = 0; i < subCategory.length; i++) {
+      subCategoryOptions.push({
+        name: subCategory[i].name,
+        value: subCategory[i].id,
+      });
+    }
+  }
+
   return (
     <div>
       <Offcanvas
@@ -97,26 +138,55 @@ const AddProduct = ({ show, setShow, data, type }) => {
             <div className="product-form fw-semi-bold  py-4 px-2 fs-14">
               <Formik
                 initialValues={{
-                  product_title: "",
-                  buy_price: "",
-                  sell_price: "",
+                  product_title: data ? data.name : "",
+                  buy_price: data ? data.buy_price : "",
+                  sell_price: data ? data.sell_price : "",
                   products: productArray,
-                  category: "",
-                  sub_category: "",
-                  product_quantity: "",
-                  description: "",
-                  keywords: "",
+                  category: data ? data.category_id : "",
+                  sub_category: data ? data.subcategory_id : "",
+                  description: data ? data.description : "",
+                  keywords: data ? data.keywords : "",
                 }}
                 validationSchema={validate}
                 onSubmit={async (values) => {
-                  // const res = await commonLogin(values, setLoading);
-                  // if (res.status === 1) {
-                  //   router.reload(window.location.pathname);
-                  // } else if (typeof res.msg === "object") {
-                  //   setLoginError(Object.values(res.msg)[0][0]);
-                  // } else {
-                  //   setLoginError(res.msg);
-                  // }
+                  const form = new FormData();
+                  form.append("name", values.product_title);
+                  form.append("description", values.description);
+                  form.append("category_id", values.category);
+                  form.append("subcategory_id", values.sub_category);
+                  form.append("keywords", values.keywords);
+                  form.append("buy_price", values.buy_price);
+                  form.append("sell_price", values.sell_price);
+                  for (let i = 0; i < image.length; i++) {
+                    form.append(`images[${i}]`, image[i].file);
+                  }
+                  for (let i = 0; i < values.products.length; i++) {
+                    form.append(
+                      `variations[${i}][size]`,
+                      values.products[i].product_size
+                    );
+                    form.append(
+                      `variations[${i}][quantity]`,
+                      values.products[i].quantity
+                    );
+                    form.append(`variations[${i}][color]`, "red");
+                  }
+                  const res = data
+                    ? await updateProduct(form, token, data.id, setLoading)
+                    : await addProduct(form, token, setLoading);
+
+                  console.log(res);
+                  if (
+                    !res.hasOwnProperty("errors") &&
+                    !res.hasOwnProperty("message")
+                  ) {
+                    setUpdated(!updated);
+                    setShow(false);
+                  } else if (typeof res.errors === "object") {
+                    setError(Object.values(res.errors)[0][0]);
+                  } else {
+                    setError(res.message);
+                  }
                 }}
               >
                 {(formik) => (
@@ -228,7 +298,7 @@ const AddProduct = ({ show, setShow, data, type }) => {
                           placeholder="Select"
                           name="category"
                           id="category"
-                          options={category}
+                          options={categoryOptions}
                         />
                       </div>
                       <div className="col-6 mb-3">
@@ -237,7 +307,7 @@ const AddProduct = ({ show, setShow, data, type }) => {
                           placeholder="Select"
                           name="sub_category"
                           id="sub_category"
-                          options={category}
+                          options={subCategoryOptions}
                         />
                       </div>
                     </div>
@@ -277,7 +347,7 @@ const AddProduct = ({ show, setShow, data, type }) => {
                       </div>
                       <div className="col-9 mb-3">
                         <TextInput
-                          type="number"
+                          type="text"
                           className="form-control is-radius-5 fs-14"
                           id="keyword"
                           placeholder="Keyword"
@@ -288,28 +358,13 @@ const AddProduct = ({ show, setShow, data, type }) => {
 
                     <div className="row mt-3">
                       <div className="col-md-6 mb-3">
-                        {loading ? (
-                          <Button
-                            disabled
-                            className="loading-button d-flex align-items-center justify-content-center w-100  "
-                          >
-                            <Spinner
-                              as="span"
-                              animation="grow"
-                              size="md"
-                              role="status"
-                              aria-hidden="true"
-                            />
-                            <span className="ms-3"> Loading...</span>
-                          </Button>
-                        ) : (
-                          <button
-                            className="primary-btn py-md fs-14 text-danger bg-transparent is-radius-5 w-100"
-                            type="button"
-                          >
-                            <span className="pe-1">Cancel</span>
-                          </button>
-                        )}
+                        <button
+                          className="primary-btn py-md fs-14 text-danger bg-transparent is-radius-5 w-100"
+                          type="button"
+                          onClick={() => setShow(false)}
+                        >
+                          <span className="pe-1">Cancel</span>
+                        </button>
                       </div>
                       <div className="col-md-6">
                         {loading ? (

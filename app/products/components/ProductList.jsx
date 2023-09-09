@@ -4,6 +4,7 @@ import AddProduct from "./AddProduct";
 import ProductTable from "./ProductTable";
 
 const ProductList = ({
+  token,
   status,
   handleStatus,
   inputText,
@@ -91,6 +92,7 @@ const ProductList = ({
 
       <div className="mt-2">
         <ProductTable
+          token={token}
           data={result}
           updated={updated}
           setUpdated={setUpdated}
@@ -100,7 +102,16 @@ const ProductList = ({
         />
       </div>
 
-      <AddProduct show={showModal} setShow={setShowModal} type={"Add"} />
+      {showModal && (
+        <AddProduct
+          show={showModal}
+          setShow={setShowModal}
+          type={"Add"}
+          token={token}
+          updated={updated}
+          setUpdated={setUpdated}
+        />
+      )}
     </div>
   );
 };

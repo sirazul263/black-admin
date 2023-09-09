@@ -1,11 +1,12 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import OfferList from "./OfferList";
-const data = require("../../api/data/dummy.json");
+import Loader from "@/app/components/Loader";
+import { getOffers } from "@/services/offerServices";
 
-const OfferMain = () => {
+const OfferMain = ({ token }) => {
   //Fetching Data
-  const [result, setResult] = useState(data);
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [updated, setUpdated] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
@@ -23,21 +24,34 @@ const OfferMain = () => {
     setPageNumber(0);
     setUpdated(!updated);
   };
+
+  useEffect(() => {
+    const fetchOffers = async () => {
+      const offers = await getOffers(token, setLoading);
+      setResult(offers);
+    };
+    fetchOffers();
+  }, [updated]);
+
   return (
     <div className="px-4 py-3">
-      <OfferList
-        status={status}
-        handleSearch={handleSearch}
-        handleStatus={handleStatus}
-        inputText={inputText}
-        setInputText={setInputText}
-        //Result Section
-        result={result}
-        updated={updated}
-        setUpdated={setUpdated}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-      />
+      {loading ? (
+        <Loader />
+      ) : (
+        <OfferList
+          status={status}
+          handleSearch={handleSearch}
+          handleStatus={handleStatus}
+          inputText={inputText}
+          setInputText={setInputText}
+          //Result Section
+          result={result}
+          updated={updated}
+          setUpdated={setUpdated}
+          pageNumber={pageNumber}
+          setPageNumber={setPageNumber}
+        />
+      )}
     </div>
   );
 };

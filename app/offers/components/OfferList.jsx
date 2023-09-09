@@ -76,14 +76,18 @@ const OfferList = ({
       </div>
 
       <div className="mt-2">
-        <OfferTable
-          data={result}
-          updated={updated}
-          setUpdated={setUpdated}
-          pageNumber={pageNumber}
-          setPageNumber={setPageNumber}
-          total={result.length}
-        />
+        {result && result.length > 0 ? (
+          <OfferTable
+            data={result}
+            updated={updated}
+            setUpdated={setUpdated}
+            pageNumber={pageNumber}
+            setPageNumber={setPageNumber}
+            total={result.length}
+          />
+        ) : (
+          <p className="mt-5 text-center fw-bold fs-24">No results found !</p>
+        )}
       </div>
 
       <AddOffer show={showModal} setShow={setShowModal} type={"Add"} />

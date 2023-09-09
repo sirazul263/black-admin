@@ -1,11 +1,13 @@
 "use client";
 import { useState } from "react";
 import ProductList from "./ProductList";
-const data = require("../../api/data/dummy.json");
+import Loader from "@/app/components/Loader";
+import { getProducts } from "@/services/productServices";
+import { useEffect } from "react";
 
-const ProductMain = () => {
+const ProductMain = ({ token }) => {
   //Fetching Data
-  const [result, setResult] = useState(data);
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
   const [updated, setUpdated] = useState(false);
   const [pageNumber, setPageNumber] = useState(0);
@@ -23,6 +25,14 @@ const ProductMain = () => {
     setPageNumber(0);
     setUpdated(!updated);
   };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const products = await getProducts(token, setLoading);
+      setResult(products);
+    };
+    fetchProducts();
+  }, [updated]);
   return (
     <div className="px-4 py-3">
       <div className="row">
@@ -92,19 +102,30 @@ const ProductMain = () => {
         </div>
       </div>
 
-      <ProductList
-        status={status}
-        handleSearch={handleSearch}
-        handleStatus={handleStatus}
-        inputText={inputText}
-        setInputText={setInputText}
-        //Result Section
-        result={result}
-        updated={updated}
-        setUpdated={setUpdated}
-        pageNumber={pageNumber}
-        setPageNumber={setPageNumber}
-      />
+      {loading ? (
+        <Loader />
+      ) : (
+        <>
+          {result && result.length > 0 ? (
+            <ProductList
+              token={token}
+              status={status}
+              handleSearch={handleSearch}
+              handleStatus={handleStatus}
+              inputText={inputText}
+              setInputText={setInputText}
+              //Result Section
+              result={result}
+              updated={updated}
+              setUpdated={setUpdated}
+              pageNumber={pageNumber}
+              setPageNumber={setPageNumber}
+            />
+          ) : (
+            <></>
+          )}
+        </>
+      )}
     </div>
   );
 };
