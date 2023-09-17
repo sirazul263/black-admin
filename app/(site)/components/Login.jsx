@@ -38,17 +38,16 @@ const Login = ({ setShowForgetPassword }) => {
             validationSchema={validate}
             onSubmit={async (values) => {
               const data = {
-                email: "admin@gmail.com",
+                phone_number: values.phone,
                 password: values.password,
               };
               const res = await login(data, setLoading);
-
               if (res.hasOwnProperty("token")) {
                 router.push("/dashboard");
-              } else if (typeof res.error === "object") {
-                setLoginError(Object.values(res.error)[0][0]);
+              } else if (typeof res.errors === "object") {
+                setLoginError(Object.values(res.errors)[0][0]);
               } else {
-                setLoginError(res.error);
+                setLoginError(res.message);
               }
             }}
           >
@@ -115,7 +114,7 @@ const Login = ({ setShowForgetPassword }) => {
                   </button>
                 </div>
                 {loginError && (
-                  <p className="text-danger fs-14 fw-500">
+                  <p className="text-danger fs-14 fw-semi-bold">
                     <AiOutlineExclamationCircle /> {loginError}
                   </p>
                 )}
