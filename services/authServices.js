@@ -13,7 +13,15 @@ export const login = async (data, setLoading) => {
       },
     });
 
+    const user = {
+      name: res.data.user.name,
+      email: res.data.user.email,
+      phone: res.data.user.phone_number,
+      type: res.data.user.type,
+    };
+
     Cookies.set("auth_token", res.data.token);
+    Cookies.set("user", JSON.stringify(user));
     setLoading(false);
     return res.data;
   } catch (e) {

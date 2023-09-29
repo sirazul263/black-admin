@@ -6,8 +6,9 @@ const OrderList = ({
   status,
   handleStatus,
   inputText,
-  setInputText,
+  handleSearch,
   result,
+  total,
   updated,
   setUpdated,
   pageNumber,
@@ -25,6 +26,7 @@ const OrderList = ({
                 value={status}
               >
                 <option value="">Status</option>
+                <option value="pending">Pending</option>
                 <option value="confirmed">Confirmed</option>
                 <option value="cancelled">Cancelled</option>
               </select>
@@ -40,7 +42,7 @@ const OrderList = ({
                 name="search"
                 className="form-control px-md-4"
                 placeholder="Search..."
-                onChange={(e) => setInputText(e.target.value)}
+                onChange={(e) => handleSearch(e.target.value)}
                 value={inputText}
               />
             </div>
@@ -55,7 +57,7 @@ const OrderList = ({
             setUpdated={setUpdated}
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
-            total={result.length}
+            total={total}
           />
         </div>
       </div>

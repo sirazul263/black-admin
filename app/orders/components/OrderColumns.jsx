@@ -1,3 +1,4 @@
+import { capitalizeFirstLetter } from "@/helpers/Functions";
 import { format } from "date-fns";
 import { FaEdit } from "react-icons/fa";
 
@@ -104,7 +105,7 @@ export const COLUMNS = [
     Cell: (props) => {
       return (
         <div className="bg-success radius-16 text-white px-3 py-1 fs-10">
-          {props.value}
+          {capitalizeFirstLetter(props.value)}
         </div>
       );
     },
@@ -147,17 +148,17 @@ export const COLUMNS = [
   {
     Header: "Method",
     Footer: "Method",
-    accessor: "method",
+    accessor: "shipping_method.name",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      return <div className="">COD</div>;
+      return <div className="">{props.value}</div>;
     },
   },
   {
     Header: "Price",
     Footer: "Price",
-    accessor: "price",
+    accessor: "subtotal",
     disableSortBy: true,
     sticky: "left",
   },
@@ -172,14 +173,14 @@ export const COLUMNS = [
   {
     Header: "Delivery Fee",
     Footer: "Delivery Fee",
-    accessor: "delivery_fee",
+    accessor: "shipping_cost",
     disableSortBy: true,
     sticky: "left",
   },
   {
     Header: "Total Price",
     Footer: "Total Price",
-    accessor: "total_price",
+    accessor: "total_amount",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
@@ -204,8 +205,12 @@ export const COLUMNS = [
         <div className="d-flex justify-content-between align-items-center">
           <div className="custom-select" style={{ minWidth: 120 }}>
             <div>
-              <select className="form-select form-control text-clr-gray fs-12 ">
+              <select
+                className="form-select form-control text-clr-gray fs-12 "
+                value={row.original.status}
+              >
                 <option value="">Status</option>
+                <option value="pending">Pending</option>
                 <option value="confirmed">Confirmed</option>
                 <option value="cancelled">Cancelled</option>
               </select>

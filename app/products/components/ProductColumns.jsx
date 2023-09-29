@@ -1,4 +1,3 @@
-import { format } from "date-fns";
 import { Form } from "react-bootstrap";
 import { AiOutlineEye } from "react-icons/ai";
 import { FaEdit } from "react-icons/fa";
@@ -64,7 +63,7 @@ export const COLUMNS = [
   {
     Header: "CATEGORY",
     Footer: "CATEGORY",
-    accessor: "category_id",
+    accessor: "category.name",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {

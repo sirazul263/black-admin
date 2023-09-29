@@ -2,7 +2,7 @@
 import { useState } from "react";
 import ProductList from "./ProductList";
 import Loader from "@/app/components/Loader";
-import { getProducts } from "@/services/productServices";
+import { getAnalytics, getProducts } from "@/services/productServices";
 import { useEffect } from "react";
 
 const ProductMain = ({ token }) => {
@@ -27,86 +27,107 @@ const ProductMain = ({ token }) => {
   };
 
   useEffect(() => {
+    const data = {
+      token: token,
+      pageNumber: pageNumber,
+      status: status,
+      search: inputText,
+    };
     const fetchProducts = async () => {
-      const products = await getProducts(token, setLoading);
+      const products = await getProducts(data, setLoading);
       setResult(products);
     };
     fetchProducts();
   }, [updated]);
+  //Fetching Data
+  const [analytics, setAnalytics] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    const fetchAnalytics = async () => {
+      const res = await getAnalytics(token, "product", setIsLoading);
+      setAnalytics(res);
+    };
+    fetchAnalytics();
+  }, []);
   return (
     <div className="px-4 py-3">
-      <div className="row">
-        <div className="col-md-8 offset-md-2">
-          <div className="row">
-            <div className="col-md-4 mb-3">
-              <div className="radius-16 is-shadow p-3">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h5 className="fw-bold">8.2k </h5>
-                    <p className="text-clr-gray fw-bold mb-0 mt-3 fs-13">
-                      TOTAL PRODUCT
-                    </p>
-                  </div>
-                  <div>
-                    <img
-                      src="../img/car.svg"
-                      alt="logo"
-                      className="img-fluid"
-                      style={{ maxHeight: 100 }}
-                    />
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-4 mb-3">
-              <div className="radius-16 is-shadow p-3">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h5 className="fw-bold">311k </h5>
-                    <p className="text-clr-gray fw-bold mb-0 mt-3 fs-13">
-                      PUBLISHED
-                    </p>
-                  </div>
-                  <div>
-                    <img
-                      src="../img/pending.svg"
-                      alt="logo"
-                      className="img-fluid"
-                      style={{ maxHeight: 100 }}
-                    />
+      {isLoading ? (
+        <Loader />
+      ) : (
+        <div className="row">
+          <div className="col-md-8 offset-md-2">
+            <div className="row">
+              <div className="col-md-4 mb-3">
+                <div className="radius-16 is-shadow p-3">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 className="fw-bold">{analytics?.total_products} </h5>
+                      <p className="text-clr-gray fw-bold mb-0 mt-3 fs-13">
+                        TOTAL PRODUCT
+                      </p>
+                    </div>
+                    <div>
+                      <img
+                        src="../img/car.svg"
+                        alt="logo"
+                        className="img-fluid"
+                        style={{ maxHeight: 100 }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div className="col-md-4  mb-3">
-              <div className="radius-16 is-shadow p-3">
-                <div className="d-flex justify-content-between align-items-center">
-                  <div>
-                    <h5 className="fw-bold">122k </h5>
-                    <p className="text-clr-gray fw-bold mb-0 mt-3 fs-13">
-                      UNPUBLISHED
-                    </p>
+              <div className="col-md-4 mb-3">
+                <div className="radius-16 is-shadow p-3">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 className="fw-bold">--- </h5>
+                      <p className="text-clr-gray fw-bold mb-0 mt-3 fs-13">
+                        PUBLISHED
+                      </p>
+                    </div>
+                    <div>
+                      <img
+                        src="../img/pending.svg"
+                        alt="logo"
+                        className="img-fluid"
+                        style={{ maxHeight: 100 }}
+                      />
+                    </div>
                   </div>
-                  <div>
-                    <img
-                      src="../img/cancelled.svg"
-                      alt="logo"
-                      className="img-fluid"
-                      style={{ maxHeight: 100 }}
-                    />
+                </div>
+              </div>
+              <div className="col-md-4  mb-3">
+                <div className="radius-16 is-shadow p-3">
+                  <div className="d-flex justify-content-between align-items-center">
+                    <div>
+                      <h5 className="fw-bold">---- </h5>
+                      <p className="text-clr-gray fw-bold mb-0 mt-3 fs-13">
+                        UNPUBLISHED
+                      </p>
+                    </div>
+                    <div>
+                      <img
+                        src="../img/cancelled.svg"
+                        alt="logo"
+                        className="img-fluid"
+                        style={{ maxHeight: 100 }}
+                      />
+                    </div>
                   </div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       {loading ? (
         <Loader />
       ) : (
         <>
-          {result && result.length > 0 ? (
+          {result && result.hasOwnProperty("data") && result.data.length > 0 ? (
             <ProductList
               token={token}
               status={status}
@@ -115,14 +136,17 @@ const ProductMain = ({ token }) => {
               inputText={inputText}
               setInputText={setInputText}
               //Result Section
-              result={result}
+              result={result.data}
+              total={result.total}
               updated={updated}
               setUpdated={setUpdated}
               pageNumber={pageNumber}
               setPageNumber={setPageNumber}
             />
           ) : (
-            <></>
+            <>
+              <p className="text-center">No results found</p>
+            </>
           )}
         </>
       )}

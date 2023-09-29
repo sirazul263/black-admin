@@ -45,7 +45,6 @@ const OrderTable = ({
 
   return (
     <>
-      {" "}
       <div className="order-table">
         <div style={{ minWidth: 350, overflowY: "auto" }}>
           <table {...getTableProps()}>

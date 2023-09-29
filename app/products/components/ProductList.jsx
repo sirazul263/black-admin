@@ -10,6 +10,7 @@ const ProductList = ({
   inputText,
   setInputText,
   result,
+  total,
   updated,
   setUpdated,
   pageNumber,
@@ -94,11 +95,11 @@ const ProductList = ({
         <ProductTable
           token={token}
           data={result}
+          total={total}
           updated={updated}
           setUpdated={setUpdated}
           pageNumber={pageNumber}
           setPageNumber={setPageNumber}
-          total={result.length}
         />
       </div>
 

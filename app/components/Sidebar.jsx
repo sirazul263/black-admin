@@ -12,13 +12,14 @@ const Sidebar = ({ page }) => {
   const router = useRouter();
   //Sign out
   const handleSignOut = () => {
-    signOut();
-    router.push("/login");
+    Cookies.remove("auth_token");
+    Cookies.remove("user");
+    router.push("/");
   };
 
   //User
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState(null);
 
   // `setCookie` and `deleteCookie` code here
 
@@ -62,10 +63,10 @@ const Sidebar = ({ page }) => {
             </div>
             <div className="ms-3">
               <p className="fs-14 mb-0  fw-bold">
-                {user?.user_name || "Hudson Alvarez"}
+                {user?.name || "Hudson Alvarez"}
               </p>
               <p className="fs-12 mb-0 text-clr-light">
-                {user ? capitalizeFirstLetter(user.role) : "Admin"}
+                {user?.role ? user.role : "Admin"}
               </p>
             </div>
           </div>

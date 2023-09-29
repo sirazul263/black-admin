@@ -384,3 +384,7 @@ input {
   border: 1px dashed #dce0e4;
   max-width: 100px;
 }
+.img-preview {
+  height: 100px;
+  width: 100px;
+}

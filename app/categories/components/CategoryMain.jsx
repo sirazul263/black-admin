@@ -33,13 +33,13 @@ const CategoryMain = ({ token }) => {
         <Loader />
       ) : (
         <>
-          {result && result.length > 0 ? (
+          {result && result.hasOwnProperty("data") ? (
             <CategoryList
               handleSearch={handleSearch}
               inputText={inputText}
               setInputText={setInputText}
               //Result Section
-              result={result}
+              result={result.data}
               updated={updated}
               setUpdated={setUpdated}
               pageNumber={pageNumber}
@@ -47,7 +47,9 @@ const CategoryMain = ({ token }) => {
               token={token}
             />
           ) : (
-            <></>
+            <>
+              <p>No Categories Found!</p>
+            </>
           )}
         </>
       )}
