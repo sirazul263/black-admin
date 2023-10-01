@@ -2,9 +2,6 @@ import { cookies } from "next/headers";
 import LoginMain from "./components/LoginMain";
 import { redirect } from "next/navigation";
 export default function Home() {
-  const cookieStore = cookies();
-  const accessToken = cookieStore.get("auth_token");
-  console.log(accessToken);
   // if (accessToken) {
   //   redirect("/dashboard");
   // }
@@ -13,7 +10,7 @@ export default function Home() {
       className="d-flex justify-content-center align-items-center bg-clr-primary "
       style={{ height: "100vh" }}
     >
-      <LoginMain accessToken={accessToken} />
+      <LoginMain />
     </div>
   );
 }
