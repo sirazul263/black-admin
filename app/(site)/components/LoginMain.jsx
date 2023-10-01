@@ -12,7 +12,9 @@ const ResetPassword = dynamic(() => import("./ResetPassword"), {
   ssr: false,
 });
 
-const LoginMain = () => {
+const LoginMain = ({ accessToken }) => {
+  console.log("accessToken", accessToken);
+
   const [showForgetPassword, setShowForgetPassword] = useState(false);
   const [showOtp, setShowOtp] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
