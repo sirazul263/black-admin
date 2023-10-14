@@ -3,7 +3,6 @@ import ReactPaginate from "react-paginate";
 import { usePagination, useSortBy, useTable } from "react-table";
 import Form from "react-bootstrap/Form";
 import { COLUMNS } from "./OfferColumns";
-import AddOffer from "./AddOffer";
 
 const OfferTable = ({
   data,
@@ -201,12 +200,6 @@ const OfferTable = ({
           </div>
         </div>
       </div>
-      <AddOffer
-        show={showModal}
-        setShow={setShowModal}
-        data={selected}
-        type={"Update"}
-      />
     </div>
   );
 };

@@ -31,7 +31,7 @@ const SelectField = ({ label, notRequired, options, ...props }) => {
         name={field.name}
         component="div"
         className="invalid-feedback"
-        style={{ fontSize: 13, color: "red", fontWeight: 600 }}
+        style={{ fontSize: 13, color: "red", fontWeight: 500 }}
       />
     </div>
   );

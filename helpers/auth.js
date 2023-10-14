@@ -1,4 +1,4 @@
-import { cookies } from "next/dist/client/components/headers";
+import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default function protectedPage() {

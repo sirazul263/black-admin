@@ -63,109 +63,107 @@ const AddCategory = ({
           </Offcanvas.Title>
         </Offcanvas.Header>
         <Offcanvas.Body>
-          <div>
-            <div className="product-form fw-semi-bold  py-4 px-1 fs-14">
-              <Formik
-                initialValues={{
-                  category_name: data ? data.name : "",
-                }}
-                validationSchema={validate}
-                onSubmit={async (values) => {
-                  const form = new FormData();
-                  form.append("name", values.category_name);
-                  for (let i = 0; i < image.length; i++) {
-                    form.append(`images[${i}]`, image[i].file);
-                  }
-                  const res = data
-                    ? await updateCategory(form, token, data.id, setLoading)
-                    : await addCategory(form, token, setLoading);
-                  if (
-                    !res.hasOwnProperty("errors") &&
-                    !res.hasOwnProperty("message")
-                  ) {
-                    setUpdated(!updated);
-                    setShow(false);
-                  } else if (typeof res.errors === "object") {
-                    setError(Object.values(res.errors)[0][0]);
-                  } else {
-                    setError(res.message);
-                  }
-                }}
-              >
-                {(formik) => (
-                  <Form>
-                    <div className="row mb-4">
-                      <div className="col-3">
-                        <p className="">
-                          Category Title/Name
-                          <span className="text-danger">*</span>
-                        </p>
-                      </div>
-                      <div className="col-9 mb-3">
-                        <TextInput
-                          type="text"
-                          className="form-control is-radius-5 fs-14"
-                          id="category_name"
-                          placeholder="Category name"
-                          name="category_name"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="row">
-                      <div className="col-3">
-                        <p className="mb-0">
-                          Category Icon <span className="text-danger">*</span>
-                        </p>
-                      </div>
-                      <div className="col-9 mb-3">
-                        <PhotoUploader onChange={_imageUpload} images={image} />
-                      </div>
-                    </div>
-                    {error && (
-                      <p className="text-danger fs-14  text-center">
-                        <AiOutlineExclamationCircle /> {error}
+          <div className="product-form fw-semi-bold  py-4 px-1 fs-14">
+            <Formik
+              initialValues={{
+                category_name: data ? data.name : "",
+              }}
+              validationSchema={validate}
+              onSubmit={async (values) => {
+                const form = new FormData();
+                form.append("name", values.category_name);
+                for (let i = 0; i < image.length; i++) {
+                  form.append(`images[${i}]`, image[i].file);
+                }
+                const res = data
+                  ? await updateCategory(form, token, data.id, setLoading)
+                  : await addCategory(form, token, setLoading);
+                if (
+                  !res.hasOwnProperty("errors") &&
+                  !res.hasOwnProperty("message")
+                ) {
+                  setUpdated(!updated);
+                  setShow(false);
+                } else if (typeof res.errors === "object") {
+                  setError(Object.values(res.errors)[0][0]);
+                } else {
+                  setError(res.message);
+                }
+              }}
+            >
+              {(formik) => (
+                <Form>
+                  <div className="row mb-4">
+                    <div className="col-3">
+                      <p className="">
+                        Category Title/Name
+                        <span className="text-danger">*</span>
                       </p>
-                    )}
-                    <div className="row mt-3">
-                      <div className="col-md-6 mb-3">
-                        <button
-                          className="primary-btn py-md fs-14 text-danger bg-transparent is-radius-5 w-100"
-                          type="button"
-                          onClick={() => setShow(false)}
-                        >
-                          <span className="pe-1">Cancel</span>
-                        </button>
-                      </div>
-                      <div className="col-md-6">
-                        {loading ? (
-                          <Button
-                            disabled
-                            className="loading-button d-flex align-items-center justify-content-center w-100  "
-                          >
-                            <Spinner
-                              as="span"
-                              animation="grow"
-                              size="md"
-                              role="status"
-                              aria-hidden="true"
-                            />
-                            <span className="ms-3"> Loading...</span>
-                          </Button>
-                        ) : (
-                          <button
-                            className="primary-btn bg-clr-primary text-dark py-md fs-14 is-radius-5 border-0  w-100  "
-                            type="submit"
-                          >
-                            <span className="pe-1">{type} Category</span>
-                          </button>
-                        )}
-                      </div>
                     </div>
-                  </Form>
-                )}
-              </Formik>
-            </div>
+                    <div className="col-9 mb-3">
+                      <TextInput
+                        type="text"
+                        className="form-control is-radius-5 fs-14"
+                        id="category_name"
+                        placeholder="Category name"
+                        name="category_name"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="row">
+                    <div className="col-3">
+                      <p className="mb-0">
+                        Category Icon <span className="text-danger">*</span>
+                      </p>
+                    </div>
+                    <div className="col-9 mb-3">
+                      <PhotoUploader onChange={_imageUpload} images={image} />
+                    </div>
+                  </div>
+                  {error && (
+                    <p className="text-danger fs-14  text-center">
+                      <AiOutlineExclamationCircle /> {error}
+                    </p>
+                  )}
+                  <div className="row mt-3">
+                    <div className="col-md-6 mb-3">
+                      <button
+                        className="primary-btn py-md fs-14 text-danger bg-transparent is-radius-5 w-100"
+                        type="button"
+                        onClick={() => setShow(false)}
+                      >
+                        <span className="pe-1">Cancel</span>
+                      </button>
+                    </div>
+                    <div className="col-md-6">
+                      {loading ? (
+                        <Button
+                          disabled
+                          className="loading-button d-flex align-items-center justify-content-center w-100  "
+                        >
+                          <Spinner
+                            as="span"
+                            animation="grow"
+                            size="md"
+                            role="status"
+                            aria-hidden="true"
+                          />
+                          <span className="ms-3"> Loading...</span>
+                        </Button>
+                      ) : (
+                        <button
+                          className="primary-btn bg-clr-primary text-dark py-md fs-14 is-radius-5 border-0  w-100  "
+                          type="submit"
+                        >
+                          <span className="pe-1">{type} Category</span>
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                </Form>
+              )}
+            </Formik>
           </div>
         </Offcanvas.Body>
       </Offcanvas>

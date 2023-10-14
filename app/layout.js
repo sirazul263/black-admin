@@ -2,6 +2,8 @@ import "./globals.css";
 import { Ubuntu } from "next/font/google";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "react-modern-drawer/dist/index.css";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const ubuntu = Ubuntu({
   subsets: ["latin"],
@@ -17,7 +19,13 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={ubuntu.className}>{children}</body>
+      <head>
+        <meta charset="utf-8" />
+      </head>
+      <body className={ubuntu.className}>
+        <ToastContainer position="top-center" limit={1} />
+        {children}
+      </body>
     </html>
   );
 }

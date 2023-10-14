@@ -85,21 +85,21 @@ const AddProduct = ({
   }, []);
 
   const categoryOptions = [];
-  if (category && category.length > 0) {
-    for (let i = 0; i < category.length; i++) {
+  if (category && category.data.length > 0) {
+    for (let i = 0; i < category.data.length; i++) {
       categoryOptions.push({
-        name: category[i].name,
-        value: category[i].id,
+        name: category.data[i].name,
+        value: category.data[i].id,
       });
     }
   }
 
   const subCategoryOptions = [];
-  if (subCategory && subCategory.length > 0) {
-    for (let i = 0; i < subCategory.length; i++) {
+  if (subCategory && subCategory.data.length > 0) {
+    for (let i = 0; i < subCategory.data.length; i++) {
       subCategoryOptions.push({
-        name: subCategory[i].name,
-        value: subCategory[i].id,
+        name: subCategory.data[i].name,
+        value: subCategory.data[i].id,
       });
     }
   }
@@ -175,7 +175,6 @@ const AddProduct = ({
                     ? await updateProduct(form, token, data.id, setLoading)
                     : await addProduct(form, token, setLoading);
 
-                  console.log(res);
                   if (
                     !res.hasOwnProperty("errors") &&
                     !res.hasOwnProperty("message")
