@@ -1,6 +1,6 @@
 import React from "react";
 import ImageUploading from "react-images-uploading";
-const PhotoUploader2 = ({ images, onChange }) => {
+const PhotoUploader2 = ({ images, onChange, imageUrl, setImageUrl }) => {
   return (
     <div>
       <ImageUploading
@@ -23,58 +23,115 @@ const PhotoUploader2 = ({ images, onChange }) => {
         }) => (
           <div>
             <div className="upload__image-wrapper">
-              {imageList.length > 0 ? (
-                <div className="d-flex flex-wrap mt-1 mb-2">
-                  {imageList.map((image, index) => (
-                    <div key={index} className="image-item  me-3 is-radius-5">
-                      <div className="image-item__btn-wrapper d-flex justify-content-end">
-                        <button
-                          onClick={() => onImageRemove(index)}
-                          type="button"
-                          className="bg-transparent border-0"
-                          style={{
-                            marginBottom: -12,
-                            marginRight: -5,
-                            zIndex: 2,
-                          }}
-                        >
-                          <span className="cursor-pointer  remove-btn">
-                            <svg
-                              width="12"
-                              height="12"
-                              viewBox="0 0 14 14"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M13 1L1 13"
-                                stroke="#EC243C"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                              <path
-                                d="M1 1L13 13"
-                                stroke="#EC243C"
-                                strokeWidth="2"
-                                strokeLinecap="round"
-                                strokeLinejoin="round"
-                              />
-                            </svg>
-                          </span>
-                        </button>
-                      </div>
-                      <div className="border">
-                        <img
-                          src={image["data_url"]}
-                          alt=""
-                          width="100%"
-                          height="200px"
-                        />
+              {imageList.length > 0 || imageUrl ? (
+                <>
+                  {imageUrl ? (
+                    <div className="d-flex flex-wrap mt-1 mb-2">
+                      <div className="image-item  me-3 is-radius-5">
+                        <div className="image-item__btn-wrapper d-flex justify-content-end">
+                          <button
+                            onClick={() => setImageUrl(null)}
+                            type="button"
+                            className="bg-transparent border-0"
+                            style={{
+                              marginBottom: -12,
+                              marginRight: -5,
+                              zIndex: 2,
+                            }}
+                          >
+                            <span className="cursor-pointer  remove-btn">
+                              <svg
+                                width="12"
+                                height="12"
+                                viewBox="0 0 14 14"
+                                fill="none"
+                                xmlns="http://www.w3.org/2000/svg"
+                              >
+                                <path
+                                  d="M13 1L1 13"
+                                  stroke="#EC243C"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                                <path
+                                  d="M1 1L13 13"
+                                  stroke="#EC243C"
+                                  strokeWidth="2"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                />
+                              </svg>
+                            </span>
+                          </button>
+                        </div>
+                        <div className="border">
+                          <img
+                            src={imageUrl}
+                            alt=""
+                            width="100%"
+                            height="200px"
+                          />
+                        </div>
                       </div>
                     </div>
-                  ))}
-                </div>
+                  ) : (
+                    <div className="d-flex flex-wrap mt-1 mb-2">
+                      {imageList.map((image, index) => (
+                        <div
+                          key={index}
+                          className="image-item  me-3 is-radius-5"
+                        >
+                          <div className="image-item__btn-wrapper d-flex justify-content-end">
+                            <button
+                              onClick={() => onImageRemove(index)}
+                              type="button"
+                              className="bg-transparent border-0"
+                              style={{
+                                marginBottom: -12,
+                                marginRight: -5,
+                                zIndex: 2,
+                              }}
+                            >
+                              <span className="cursor-pointer  remove-btn">
+                                <svg
+                                  width="12"
+                                  height="12"
+                                  viewBox="0 0 14 14"
+                                  fill="none"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                >
+                                  <path
+                                    d="M13 1L1 13"
+                                    stroke="#EC243C"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                  <path
+                                    d="M1 1L13 13"
+                                    stroke="#EC243C"
+                                    strokeWidth="2"
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                  />
+                                </svg>
+                              </span>
+                            </button>
+                          </div>
+                          <div className="border">
+                            <img
+                              src={image["data_url"]}
+                              alt=""
+                              width="100%"
+                              height="200px"
+                            />
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </>
               ) : (
                 <div className="cursor-pointer   d-flex justify-content-center">
                   <button

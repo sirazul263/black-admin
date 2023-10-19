@@ -1,8 +1,13 @@
+import { capitalizeFirstLetter } from "@/helpers/Functions";
+import { updateOffer } from "@/services/offerServices";
 import { format } from "date-fns";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { Form } from "react-bootstrap";
 import { AiOutlineEye } from "react-icons/ai";
 import { FaEdit } from "react-icons/fa";
 import { FiTrash2 } from "react-icons/fi";
+import { toast } from "react-toastify";
 
 export const COLUMNS = [
   {
@@ -25,7 +30,7 @@ export const COLUMNS = [
             className="form-check-label fs-14 text-clr-purple-light fw-semi-bold ms-2"
             htmlFor="remember-me"
           >
-            c4556
+            c{props.value}
           </label>
         </div>
       );
@@ -37,6 +42,13 @@ export const COLUMNS = [
     accessor: "created_at",
     disableSortBy: true,
     sticky: "left",
+    Cell: (props) => {
+      return (
+        <span>
+          {format(new Date(props.value), "EEE, MMM dd, yyyy hh:mm:ss a")}
+        </span>
+      );
+    },
   },
   {
     Header: "PRODUCT LIST",
@@ -45,8 +57,16 @@ export const COLUMNS = [
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
+      const { setSelected, setShowModal, row } = props;
+      const handleSubmit = () => {
+        setSelected(row.original.products);
+        setShowModal(true);
+      };
       return (
-        <div className="d-flex justify-content-center me-4">
+        <div
+          className="d-flex justify-content-center me-4"
+          onClick={handleSubmit}
+        >
           <AiOutlineEye
             size={20}
             color={"#C4C4C4"}
@@ -60,16 +80,21 @@ export const COLUMNS = [
   {
     Header: "CAMPAIGN NAME",
     Footer: "CAMPAIGN NAME",
-    accessor: "phone",
+    accessor: "campaign_name",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
+      const image = props.row.original.banner_image;
       return (
         <div className="d-flex align-items-center">
           <div>
-            <img src="../img/campaign.svg" alt="logo" className="img-fluid" />
+            <img
+              src={image ? image : "../img/campaign.svg"}
+              alt="logo"
+              style={{ height: 35, width: 80, borderRadius: 5 }}
+            />
           </div>
-          <p className="ms-2 fw-bold mb-0">Free day</p>
+          <p className="ms-2 fw-bold mb-0">{props.value}</p>
         </div>
       );
     },
@@ -77,42 +102,72 @@ export const COLUMNS = [
   {
     Header: "PROMO CODE",
     Footer: "PROMO CODE",
-    accessor: "address",
+    accessor: "promo_code",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      return <span className="fw-bold">BLACK30</span>;
+      return <span className="fw-bold">{props.value.toUpperCase()}</span>;
     },
   },
 
   {
     Header: "TOTAL DISCOUNT",
     Footer: "TOTAL DISCOUNT",
-    accessor: "products",
+    accessor: "discount",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
+      const discount_type =
+        props.row.original.discount_type === "amount" ? "৳" : "%";
       return (
-        <div className="fw-bold d-flex justify-content-center me-4">20%</div>
+        <div className="fw-bold d-flex justify-content-center me-4">
+          {discount_type === "৳" && "৳"} {props.value}
+          {discount_type === "%" && "%"}
+        </div>
       );
     },
   },
   {
     Header: "PUBLISHED",
     Footer: "PUBLISHED",
-    accessor: "price",
+    accessor: "published",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
+      const { row, updated, setUpdated, token } = props;
+      const data = row.original;
+      const [loading, setLoading] = useState(false);
+      const handleChange = async () => {
+        const form = {
+          published: data.published === 1 ? 0 : 1,
+        };
+        const res = await updateOffer(form, token, data.id, setLoading);
+        if (!res.hasOwnProperty("errors")) {
+          setUpdated(!updated);
+          toast.success("Offer updated successfully", {
+            autoClose: 200,
+          });
+        } else {
+          toast.error("Failed to update offer", {
+            autoClose: 200,
+          });
+        }
+      };
       return (
         <div>
-          <Form>
-            <Form.Check // prettier-ignore
-              type="switch"
-              id="custom-switch"
-              className="fs-16"
-            />
-          </Form>
+          {loading ? (
+            <p>Loading....</p>
+          ) : (
+            <Form>
+              <Form.Check // prettier-ignore
+                type="switch"
+                id="custom-switch"
+                className="fs-16"
+                checked={props.value === 1 ? true : false}
+                onChange={handleChange}
+              />
+            </Form>
+          )}
         </div>
       );
     },
@@ -120,21 +175,35 @@ export const COLUMNS = [
   {
     Header: "START DATE",
     Footer: "START DATE",
-    accessor: "sell",
+    accessor: "valid_from",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      return <div>Wed, Jun 24, 2021 4:00PM</div>;
+      return (
+        <span>
+          {format(
+            new Date(props.value.split(" ")[0]),
+            "EEE, MMM dd, yyyy hh:mm:ss a"
+          )}
+        </span>
+      );
     },
   },
   {
     Header: "END DATE",
     Footer: "END DATE",
-    accessor: "stock",
+    accessor: "valid_to",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      return <div>Wed, Jun 24, 2021 4:00PM</div>;
+      return (
+        <div>
+          {format(
+            new Date(props.value.split(" ")[0]),
+            "EEE, MMM dd, yyyy hh:mm:ss a"
+          )}
+        </div>
+      );
     },
   },
   {
@@ -145,12 +214,21 @@ export const COLUMNS = [
     sticky: "left",
     Cell: (props) => {
       return (
-        <div
-          className="radius-8 text-danger px-2 py-1 fs-10"
-          style={{ backgroundColor: "rgba(214, 44, 44, 0.16)" }}
-        >
-          Expired
-        </div>
+        <>
+          {props.value == "expired" && (
+            <div
+              className="radius-8 text-danger px-2 py-1 fs-10"
+              style={{ backgroundColor: "rgba(214, 44, 44, 0.16)" }}
+            >
+              Expired
+            </div>
+          )}
+          {props.value == "active" && (
+            <div className="radius-8 text-white px-2 py-1 fs-10 bg-success">
+              Active
+            </div>
+          )}
+        </>
       );
     },
   },
@@ -162,15 +240,18 @@ export const COLUMNS = [
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      const { row, setShowModal, setSelected } = props;
-      const handleUpdate = () => {
-        setShowModal(true);
-        setSelected(row.original);
-      };
+      const { row } = props;
+      const router = useRouter();
+
       let iconStyles = { color: "#C4C4C4", fontSize: 16 };
       return (
         <div className="d-flex justify-content-between align-items-center">
-          <div className="text-muted cursor-pointer" onClick={handleUpdate}>
+          <div
+            className="text-muted cursor-pointer"
+            onClick={() =>
+              router.push(`/offers/add-offer?id=${row.original.id}`)
+            }
+          >
             <FaEdit style={iconStyles} />
           </div>
           <div>

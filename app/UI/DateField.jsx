@@ -31,7 +31,7 @@ const DateField = ({ max, min, name, ...props }) => {
       <ErrorMessage
         name={name}
         component="div"
-        style={{ fontSize: 13, color: "red", fontWeight: 600, marginTop: 5 }}
+        style={{ fontSize: 13, color: "red", fontWeight: 500, marginTop: 5 }}
       />
     </div>
   );

@@ -38,19 +38,28 @@ const OfferMain = ({ token }) => {
       {loading ? (
         <Loader />
       ) : (
-        <OfferList
-          status={status}
-          handleSearch={handleSearch}
-          handleStatus={handleStatus}
-          inputText={inputText}
-          setInputText={setInputText}
-          //Result Section
-          result={result}
-          updated={updated}
-          setUpdated={setUpdated}
-          pageNumber={pageNumber}
-          setPageNumber={setPageNumber}
-        />
+        <>
+          {result && result.hasOwnProperty("data") && result.data.length > 0 ? (
+            <OfferList
+              status={status}
+              handleSearch={handleSearch}
+              handleStatus={handleStatus}
+              inputText={inputText}
+              setInputText={setInputText}
+              //Result Section
+              result={result.data}
+              updated={updated}
+              setUpdated={setUpdated}
+              pageNumber={pageNumber}
+              setPageNumber={setPageNumber}
+              token={token}
+            />
+          ) : (
+            <>
+              <p className="text-center">No results found</p>
+            </>
+          )}
+        </>
       )}
     </div>
   );

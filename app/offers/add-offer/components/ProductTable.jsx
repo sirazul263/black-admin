@@ -2,21 +2,20 @@ import React, { useMemo, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { usePagination, useSortBy, useTable } from "react-table";
 import Form from "react-bootstrap/Form";
-import { COLUMNS } from "./OfferColumns";
-import ShowProduct from "./ShowProduct";
+import { COLUMNS } from "./ProductColumns";
 
-const OfferTable = ({
+const ProductTable = ({
   data,
   updated,
   setUpdated,
   pageNumber,
   setPageNumber,
   total,
-  token,
+  selected,
+  setSelected,
 }) => {
   const columns = useMemo(() => COLUMNS, []);
-  const [selected, setSelected] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+
   const {
     getTableProps,
     getTableBodyProps,
@@ -29,11 +28,8 @@ const OfferTable = ({
       columns,
       initialState: { pageIndex: 0, hiddenColumns: [""] },
       data,
-      setShowModal,
+      selected,
       setSelected,
-      token,
-      updated,
-      setUpdated,
     },
     useSortBy,
     usePagination
@@ -205,12 +201,8 @@ const OfferTable = ({
           </div>
         </div>
       </div>
-
-      {showModal && (
-        <ShowProduct show={showModal} setShow={setShowModal} data={selected} />
-      )}
     </div>
   );
 };
 
-export default OfferTable;
+export default ProductTable;

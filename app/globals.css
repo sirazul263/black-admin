@@ -467,8 +467,26 @@ input {
 }
 .register-date .react-datepicker-wrapper input {
   padding: 10px 10px;
-  width: 100% !important;
+  width: 400px !important;
   border: 1px solid #ced4da;
   border-radius: 5px;
   height: 45px;
+}
+@media (max-width: 968px) {
+  .register-date .react-datepicker-wrapper input {
+    width: 100% !important;
+  }
+}
+.form-check-input {
+  border: 1px solid #ccc !important;
+}
+.form-check-input:checked {
+  background-color: #fcd800 !important;
+  border-color: #fcd800 !important;
+}
+.form-check-input:focus {
+  border-color: none !important;
+  outline: 0 !important;
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
 }
