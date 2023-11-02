@@ -1,6 +1,9 @@
 import { capitalizeFirstLetter } from "@/helpers/Functions";
+import { updateOrderStatus } from "@/services/orderServices";
 import { format } from "date-fns";
+import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
+import { toast } from "react-toastify";
 
 export const COLUMNS = [
   {
@@ -195,10 +198,34 @@ export const COLUMNS = [
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      const { row, setShowModal, setSelected } = props;
+      const { row, setShowModal, setSelected, updated, setUpdated, token } =
+        props;
+      const [loading, setLoading] = useState(false);
       const handleUpdate = () => {
         setShowModal(true);
         setSelected(row.original);
+      };
+
+      const handleStatus = async (status) => {
+        const data = {
+          status: status,
+        };
+        const res = await updateOrderStatus(
+          data,
+          row.original.id,
+          token,
+          setLoading
+        );
+        if (res.hasOwnProperty("data")) {
+          setUpdated(!updated);
+          toast.success("News updated successfully!", {
+            autoClose: 200,
+          });
+        } else {
+          toast.error(res.message, {
+            autoClose: 200,
+          });
+        }
       };
       let iconStyles = { color: "#C4C4C4", fontSize: 20 };
       return (
@@ -208,11 +235,16 @@ export const COLUMNS = [
               <select
                 className="form-select form-control text-clr-gray fs-12 "
                 value={row.original.status}
+                onChange={(e) => handleStatus(e.target.value)}
               >
                 <option value="">Status</option>
-                <option value="pending">Pending</option>
-                <option value="confirmed">Confirmed</option>
-                <option value="cancelled">Cancelled</option>
+                {row.original.status === "pending" && (
+                  <>
+                    <option value="pending">Pending</option>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="cancelled">Cancelled</option>
+                  </>
+                )}
               </select>
             </div>
           </div>

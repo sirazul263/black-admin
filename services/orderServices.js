@@ -24,3 +24,24 @@ export const getOrders = async (data, setLoading) => {
     return e.response.data;
   }
 };
+
+//Order Status
+
+export const updateOrderStatus = async (data, id, token, setLoading) => {
+  setLoading(true);
+  try {
+    const res = await axios.put(`${api}/orders/${id}`, data, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setLoading(false);
+    return {
+      status: 1,
+      data: res.data,
+    };
+  } catch (e) {
+    setLoading(false);
+    return e.response.data;
+  }
+};

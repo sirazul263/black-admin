@@ -13,6 +13,7 @@ const OrderList = ({
   setUpdated,
   pageNumber,
   setPageNumber,
+  token,
 }) => {
   return (
     <div className="my-md-4 my-3">
@@ -58,6 +59,7 @@ const OrderList = ({
             pageNumber={pageNumber}
             setPageNumber={setPageNumber}
             total={total}
+            token={token}
           />
         </div>
       </div>

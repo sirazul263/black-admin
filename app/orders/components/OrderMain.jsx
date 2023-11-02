@@ -161,6 +161,7 @@ const OrderMain = ({ token }) => {
               setUpdated={setUpdated}
               pageNumber={pageNumber}
               setPageNumber={setPageNumber}
+              token={token}
             />
           ) : (
             <>

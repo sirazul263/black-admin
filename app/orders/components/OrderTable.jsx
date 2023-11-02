@@ -13,6 +13,7 @@ const OrderTable = ({
   pageNumber,
   setPageNumber,
   total,
+  token,
 }) => {
   const columns = useMemo(() => COLUMNS, []);
   const [selected, setSelected] = useState(null);
@@ -31,6 +32,9 @@ const OrderTable = ({
       data,
       setShowModal,
       setSelected,
+      updated,
+      setUpdated,
+      token,
     },
     useSortBy,
     usePagination
@@ -204,7 +208,12 @@ const OrderTable = ({
           </div>
         </div>
       </div>
-      <UpdateOrder show={showModal} setShow={setShowModal} data={selected} />
+      <UpdateOrder
+        show={showModal}
+        setShow={setShowModal}
+        data={selected}
+        token={token}
+      />
     </>
   );
 };
