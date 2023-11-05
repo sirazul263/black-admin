@@ -30,29 +30,32 @@ export const COLUMNS = [
   {
     Header: "Full Name",
     Footer: "Full Name",
-    accessor: "full_name",
+    accessor: "delivery_information.full_name",
     disableSortBy: true,
     sticky: "left",
+    Cell: (props) => {
+      return <span>{props.value || "------"}</span>;
+    },
   },
 
   {
     Header: "Phone Number",
     Footer: "Phone Number",
-    accessor: "phone",
+    accessor: "delivery_information.phone",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      return <span>{props.value ? props.value : "--------"}</span>;
+      return <span>{props.value || "--------"}</span>;
     },
   },
   {
     Header: "Address",
     Footer: "Address",
-    accessor: "address",
+    accessor: "delivery_information.address",
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      return <span>{props.value ? props.value : "--------"}</span>;
+      return <span>{props.value || "--------"}</span>;
     },
   },
 
@@ -63,6 +66,12 @@ export const COLUMNS = [
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
+      const { row, setShowDetails, setSelected } = props;
+      const handleSubmit = () => {
+        setSelected(row.original);
+        setShowDetails(true);
+      };
+
       return (
         <div className="d-flex justify-content-between">
           <div>
@@ -73,6 +82,7 @@ export const COLUMNS = [
               fill="none"
               xmlns="http://www.w3.org/2000/svg"
               className="cursor-pointer"
+              onClick={handleSubmit}
             >
               <g clipPath="url(#clip0_126_5353)">
                 <path
@@ -107,8 +117,12 @@ export const COLUMNS = [
     sticky: "left",
     Cell: (props) => {
       return (
-        <div className="bg-success radius-16 text-white px-3 py-1 fs-10">
-          {capitalizeFirstLetter(props.value)}
+        <div>
+          {props.value === "pending" && (
+            <span className="bg-warning radius-16 text-white px-3 py-1 fs-10">
+              Pending
+            </span>
+          )}
         </div>
       );
     },

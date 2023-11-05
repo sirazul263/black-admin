@@ -5,6 +5,7 @@ import Form from "react-bootstrap/Form";
 
 import { COLUMNS } from "./OrderColumns";
 import UpdateOrder from "./UpdateOrder";
+import DetailsModal from "@/app/components/Modal/DetailsModal";
 
 const OrderTable = ({
   data,
@@ -18,6 +19,7 @@ const OrderTable = ({
   const columns = useMemo(() => COLUMNS, []);
   const [selected, setSelected] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showDetails, setShowDetails] = useState(false);
   const {
     getTableProps,
     getTableBodyProps,
@@ -32,6 +34,7 @@ const OrderTable = ({
       data,
       setShowModal,
       setSelected,
+      setShowDetails,
       updated,
       setUpdated,
       token,
@@ -214,6 +217,14 @@ const OrderTable = ({
         data={selected}
         token={token}
       />
+
+      {showDetails && (
+        <DetailsModal
+          show={showDetails}
+          setShow={setShowDetails}
+          data={selected}
+        />
+      )}
     </>
   );
 };
