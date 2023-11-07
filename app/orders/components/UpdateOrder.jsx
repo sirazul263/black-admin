@@ -20,19 +20,31 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
       value: "pending",
     },
     {
-      name: "Completed",
-      value: "completed",
+      name: "Confirmed",
+      value: "confirmed",
+    },
+    {
+      name: "Shipped",
+      value: "shipped",
+    },
+    {
+      name: "Delivered",
+      value: "delivered",
+    },
+    {
+      name: "Canceled",
+      value: "canceled",
     },
   ];
 
   const deliveryOptions = [
     {
       name: "Inside Dhaka",
-      value: "inside",
+      value: "INSIDE_DHAKA",
     },
     {
       name: "Outside Dhaka",
-      value: "outside",
+      value: "OUTSIDE_DHAKA",
     },
   ];
 
@@ -52,22 +64,7 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
   const [loading, setLoading] = useState(false);
   const sizes = ["XXL", "XL", "L", "M", "S", "XS"];
 
-  const products = [
-    {
-      name: "Red shoe",
-      size: 9,
-      image: "../../../img/shoe1.svg",
-      price: 300,
-      quantity: 1,
-    },
-    {
-      name: "White shoe",
-      size: 9,
-      image: "../../../img/shoe2.svg",
-      price: 279,
-      quantity: 1,
-    },
-  ];
+  const products = data.order_items;
 
   const [showProduct, setShowProduct] = useState(false);
 
@@ -150,6 +147,7 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
     } else return 0;
   };
 
+  console.log(data);
   return (
     <div>
       <Offcanvas
@@ -299,13 +297,14 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
               <div className="product-form  py-4 px-3">
                 <Formik
                   initialValues={{
-                    phone: "",
-                    name: "",
-                    address: "",
+                    phone: data.delivery_information.phone,
+                    name: data.delivery_information.full_name,
+                    address: data.delivery_information.address,
                     cod_fee: "",
-                    total_amount: "",
-                    delivery_type: "",
-                    delivery_fee: "",
+                    total_amount: data.total_amount,
+                    delivery_type: data.shipping_method.name,
+                    delivery_fee: data.shipping_method.cost,
+                    status: data.status,
                   }}
                   validationSchema={validate}
                   onSubmit={async (values) => {

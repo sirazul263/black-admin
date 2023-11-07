@@ -123,6 +123,29 @@ export const COLUMNS = [
               Pending
             </span>
           )}
+          {props.value === "confirmed" && (
+            <span
+              className="radius-16 text-white px-3 py-1 fs-10"
+              style={{ backgroundColor: "gray" }}
+            >
+              Confirmed
+            </span>
+          )}
+          {props.value === "canceled" && (
+            <span className="bg-danger radius-16 text-white px-3 py-1 fs-10">
+              Canceled
+            </span>
+          )}
+          {props.value === "shipped" && (
+            <span className="bg-primary radius-16 text-white px-3 py-1 fs-10">
+              Shipped
+            </span>
+          )}
+          {props.value === "delivered" && (
+            <span className="bg-success radius-16 text-white px-3 py-1 fs-10">
+              Delivered
+            </span>
+          )}
         </div>
       );
     },
@@ -250,13 +273,40 @@ export const COLUMNS = [
                 className="form-select form-control text-clr-gray fs-12 "
                 value={row.original.status}
                 onChange={(e) => handleStatus(e.target.value)}
+                disabled={
+                  row.original.status === "delivered" ||
+                  row.original.status === "canceled"
+                }
               >
                 <option value="">Status</option>
                 {row.original.status === "pending" && (
                   <>
                     <option value="pending">Pending</option>
                     <option value="confirmed">Confirmed</option>
-                    <option value="cancelled">Cancelled</option>
+                    <option value="canceled">Cancelled</option>
+                  </>
+                )}
+                {row.original.status === "confirmed" && (
+                  <>
+                    <option value="confirmed">Confirmed</option>
+                    <option value="shipped">Shipped</option>
+                    <option value="canceled">Cancelled</option>
+                  </>
+                )}
+                {row.original.status === "shipped" && (
+                  <>
+                    <option value="shipped">Shipped</option>
+                    <option value="delivered">Delivered</option>
+                  </>
+                )}
+                {row.original.status === "canceled" && (
+                  <>
+                    <option value="canceled">Canceled</option>
+                  </>
+                )}
+                {row.original.status === "delivered" && (
+                  <>
+                    <option value="delivered">Delivered</option>
                   </>
                 )}
               </select>
