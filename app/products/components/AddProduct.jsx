@@ -11,7 +11,6 @@ import { addProduct, updateProduct } from "@/services/productServices";
 import { getCategories, getSubCategories } from "@/services/categoryServices";
 import { useEffect } from "react";
 import { Spinner, Button } from "react-bootstrap";
-
 const AddProduct = ({
   show,
   setShow,
@@ -22,7 +21,6 @@ const AddProduct = ({
   token,
 }) => {
   const handleClose = () => setShow(false);
-
   //States
   const validate = Yup.object({
     product_title: Yup.string().required("Product title is required"),
@@ -104,6 +102,23 @@ const AddProduct = ({
     }
   }
 
+  const handleRemoveProduct = () => {
+    const temp = [...productCount];
+    temp.pop();
+    setProductCount(temp);
+  };
+
+  const [images, setImages] = useState(
+    type === "Update" ? data.image_urls : []
+  );
+  const [deletedImages, setDeletedImages] = useState([]);
+
+  const onImageRemove = (item) => {
+    const selectedItem = images.filter((image) => image !== item);
+    setImages(selectedItem);
+    setDeletedImages([...deletedImages, item]);
+  };
+
   return (
     <div>
       <Offcanvas
@@ -170,6 +185,9 @@ const AddProduct = ({
                       values.products[i].quantity
                     );
                     form.append(`variations[${i}][color]`, "red");
+                  }
+                  for (let i = 0; i < deletedImages.length; i++) {
+                    form.append(`delete_images[${i}]`, deletedImages[i]);
                   }
                   const res = data
                     ? await updateProduct(form, token, data.id, setLoading)
@@ -247,6 +265,65 @@ const AddProduct = ({
                       </div>
                       <div className="col-9 mb-3">
                         <PhotoUploader onChange={_imageUpload} images={image} />
+                        {data && (
+                          <div>
+                            <p>Selected Images</p>
+                            <div className="d-flex">
+                              {images.map((image, i) => (
+                                <div
+                                  key={i}
+                                  className="image-item  me-3 is-radius-5"
+                                >
+                                  <div className="image-item__btn-wrapper d-flex justify-content-end">
+                                    <button
+                                      onClick={() => onImageRemove(image)}
+                                      type="button"
+                                      className="bg-transparent border-0"
+                                      style={{
+                                        marginBottom: -12,
+                                        marginRight: -5,
+                                        zIndex: 2,
+                                      }}
+                                    >
+                                      <span className="cursor-pointer  remove-btn">
+                                        <svg
+                                          width="12"
+                                          height="12"
+                                          viewBox="0 0 14 14"
+                                          fill="none"
+                                          xmlns="http://www.w3.org/2000/svg"
+                                        >
+                                          <path
+                                            d="M13 1L1 13"
+                                            stroke="#EC243C"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                          />
+                                          <path
+                                            d="M1 1L13 13"
+                                            stroke="#EC243C"
+                                            strokeWidth="2"
+                                            strokeLinecap="round"
+                                            strokeLinejoin="round"
+                                          />
+                                        </svg>
+                                      </span>
+                                    </button>
+                                  </div>
+                                  <div className="border">
+                                    <img
+                                      src={image}
+                                      alt=""
+                                      width="100"
+                                      height="100"
+                                    />
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          </div>
+                        )}
                       </div>
                     </div>
                     {productArray.map((product, i) => (
@@ -283,6 +360,17 @@ const AddProduct = ({
                               }
                             >
                               <span className="pe-1">Add</span>
+                            </button>
+                          </div>
+                        )}
+                        {i === 0 && productArray.length > 1 && (
+                          <div className="col-2 mb-3">
+                            <button
+                              className="secondary-btn bg-transparent  text-dark py-md fs-14 is-radius-5 border-0  w-100  "
+                              type="button"
+                              onClick={handleRemoveProduct}
+                            >
+                              <span className="pe-1">Remove</span>
                             </button>
                           </div>
                         )}

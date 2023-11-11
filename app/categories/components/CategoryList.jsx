@@ -71,14 +71,16 @@ const CategoryList = ({
         />
       </div>
 
-      <AddCategory
-        show={showModal}
-        setShow={setShowModal}
-        type={"Add"}
-        updated={updated}
-        setUpdated={setUpdated}
-        token={token}
-      />
+      {showModal && (
+        <AddCategory
+          show={showModal}
+          setShow={setShowModal}
+          type={"Add"}
+          updated={updated}
+          setUpdated={setUpdated}
+          token={token}
+        />
+      )}
     </div>
   );
 };

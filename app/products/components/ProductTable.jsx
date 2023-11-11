@@ -216,7 +216,7 @@ const ProductTable = ({
           setUpdated={setUpdated}
         />
       )}
-      {showModal && (
+      {showDelete && (
         <DeleteModal
           show={showDelete}
           setShow={setShowDelete}
@@ -224,6 +224,7 @@ const ProductTable = ({
           token={token}
           updated={updated}
           setUpdated={setUpdated}
+          type={"product"}
         />
       )}
     </div>

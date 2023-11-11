@@ -1,53 +1,35 @@
 "use client";
-import { capitalizeFirstLetter } from "@/helpers/Functions";
-import { deleteNews } from "@/services/newsServices";
-import { deleteProduct } from "@/services/productServices";
 import { useState } from "react";
 import { Button, Spinner } from "react-bootstrap";
 import ReactModal from "react-modal";
 import { toast } from "react-toastify";
+import { deleteCategory } from "@/services/categoryServices";
 
-const DeleteModal = ({
+const DeleteCategoryModal = ({
   show,
   setShow,
   data,
   updated,
   setUpdated,
   token,
-  type,
 }) => {
-  const [loading, setLoading] = useState(false);
   const handleClose = () => {
     setShow(false);
   };
-  const handleDelete = async () => {
-    let res;
-    if (type === "product") {
-      res = await deleteProduct(data.id, token, setLoading);
-    } else {
-      res = await deleteNews(data.id, token, setLoading);
-    }
+  const [loading, setLoading] = useState(false);
 
+  const handleDelete = async () => {
+    const res = await deleteCategory(data.id, token, setLoading);
     if (res.status === 1) {
       setUpdated(!updated);
-      toast.success(
-        type === "product"
-          ? "Product deleted successfully!"
-          : "News deleted successfully!",
-        {
-          autoClose: 200,
-        }
-      );
+      toast.success("Category deleted successfully!", {
+        autoClose: 200,
+      });
       setShow(false);
     } else {
-      toast.error(
-        type === "product"
-          ? "Failed to delete products!"
-          : "Failed to delete news!",
-        {
-          autoClose: 200,
-        }
-      );
+      toast.error("Failed to delete Category!", {
+        autoClose: 200,
+      });
       setShow(false);
     }
   };
@@ -66,7 +48,7 @@ const DeleteModal = ({
           <div className="d-none d-md-block">
             <div className="d-flex justify-content-between align-items-center p-4">
               <p className="fw-bold text-clr-gray mb-0 fs-20">
-                Delete {capitalizeFirstLetter(type)}
+                Delete Category
               </p>
               <button
                 type="button"
@@ -109,10 +91,7 @@ const DeleteModal = ({
         <div>
           <div className="d-block d-md-none">
             <div className="d-flex justify-content-between align-items-center p-4">
-              <p className="fw-bold text-clr-gray mb-0">
-                {" "}
-                Delete {capitalizeFirstLetter(type)}
-              </p>
+              <p className="fw-bold text-clr-gray mb-0"> Delete Category</p>
               <button
                 type="button"
                 className="border-0 bg-transparent"
@@ -175,7 +154,7 @@ const DeleteModal = ({
               This action can't be undone!
             </h4>
             <p className="text-clr-gray fs-16 fw-semi-bold ">
-              Are you sure you want to delete this {type}?
+              Are you sure you want to delete this category?
             </p>
             <div className="primary-input">
               <div className="d-flex justify-content-around align-items-center mt-3">
@@ -220,4 +199,4 @@ const DeleteModal = ({
   );
 };
 
-export default DeleteModal;
+export default DeleteCategoryModal;

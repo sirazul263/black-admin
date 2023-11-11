@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+"use client";
 import { Form } from "react-bootstrap";
 import { AiOutlineEye } from "react-icons/ai";
 import { FaEdit } from "react-icons/fa";
@@ -98,9 +98,14 @@ export const COLUMNS = [
     disableSortBy: true,
     sticky: "left",
     Cell: (props) => {
-      const { row, setShowModal, setSelected } = props;
+      const { row, setShowModal, setShowDeleteModal, setSelected } = props;
       const handleUpdate = () => {
         setShowModal(true);
+        setSelected(row.original);
+      };
+
+      const handleDelete = () => {
+        setShowDeleteModal(true);
         setSelected(row.original);
       };
       let iconStyles = { color: "#C4C4C4", fontSize: 20 };
@@ -109,8 +114,8 @@ export const COLUMNS = [
           <div className="text-muted cursor-pointer" onClick={handleUpdate}>
             <FaEdit style={iconStyles} />
           </div>
-          <div>
-            <FiTrash2 style={iconStyles} />
+          <div className="text-muted cursor-pointer">
+            <FiTrash2 style={iconStyles} onClick={handleDelete} />
           </div>
         </div>
       );

@@ -211,12 +211,14 @@ const OrderTable = ({
           </div>
         </div>
       </div>
-      <UpdateOrder
-        show={showModal}
-        setShow={setShowModal}
-        data={selected}
-        token={token}
-      />
+      {showModal && (
+        <UpdateOrder
+          show={showModal}
+          setShow={setShowModal}
+          data={selected}
+          token={token}
+        />
+      )}
 
       {showDetails && (
         <DetailsModal

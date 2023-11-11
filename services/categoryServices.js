@@ -64,3 +64,21 @@ export const getSubCategories = async (token) => {
     return e.response.data;
   }
 };
+export const deleteCategory = async (id, token, setLoading) => {
+  setLoading(true);
+  try {
+    const res = await axios.delete(`${api}/categories/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setLoading(false);
+    return {
+      status: 1,
+      data: res.data,
+    };
+  } catch (e) {
+    setLoading(false);
+    return e.response.data;
+  }
+};

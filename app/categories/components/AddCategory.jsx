@@ -32,6 +32,16 @@ const AddCategory = ({
   };
 
   const [error, setError] = useState(null);
+  const [images, setImages] = useState(
+    type === "Update" ? data.image_urls : []
+  );
+  const [deletedImages, setDeletedImages] = useState([]);
+
+  const onImageRemove = (item) => {
+    const selectedItem = images.filter((image) => image !== item);
+    setImages(selectedItem);
+    setDeletedImages([...deletedImages, item]);
+  };
 
   return (
     <div>
@@ -74,6 +84,9 @@ const AddCategory = ({
                 form.append("name", values.category_name);
                 for (let i = 0; i < image.length; i++) {
                   form.append(`images[${i}]`, image[i].file);
+                }
+                for (let i = 0; i < deletedImages.length; i++) {
+                  form.append(`delete_images[${i}]`, deletedImages[i]);
                 }
                 const res = data
                   ? await updateCategory(form, token, data.id, setLoading)
@@ -119,6 +132,66 @@ const AddCategory = ({
                     </div>
                     <div className="col-9 mb-3">
                       <PhotoUploader onChange={_imageUpload} images={image} />
+
+                      {data && (
+                        <div>
+                          <p>Selected Images</p>
+                          <div className="d-flex">
+                            {images.map((image, i) => (
+                              <div
+                                key={i}
+                                className="image-item  me-3 is-radius-5"
+                              >
+                                <div className="image-item__btn-wrapper d-flex justify-content-end">
+                                  <button
+                                    onClick={() => onImageRemove(image)}
+                                    type="button"
+                                    className="bg-transparent border-0"
+                                    style={{
+                                      marginBottom: -12,
+                                      marginRight: -5,
+                                      zIndex: 2,
+                                    }}
+                                  >
+                                    <span className="cursor-pointer  remove-btn">
+                                      <svg
+                                        width="12"
+                                        height="12"
+                                        viewBox="0 0 14 14"
+                                        fill="none"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                      >
+                                        <path
+                                          d="M13 1L1 13"
+                                          stroke="#EC243C"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />
+                                        <path
+                                          d="M1 1L13 13"
+                                          stroke="#EC243C"
+                                          strokeWidth="2"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                        />
+                                      </svg>
+                                    </span>
+                                  </button>
+                                </div>
+                                <div className="border">
+                                  <img
+                                    src={image}
+                                    alt=""
+                                    width="100"
+                                    height="100"
+                                  />
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                     </div>
                   </div>
                   {error && (

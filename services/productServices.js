@@ -74,3 +74,22 @@ export const getAnalytics = async (token, type, setLoading) => {
     return e.response.data;
   }
 };
+
+export const deleteProduct = async (id, token, setLoading) => {
+  setLoading(true);
+  try {
+    const res = await axios.delete(`${api}/products/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setLoading(false);
+    return {
+      status: 1,
+      data: res.data,
+    };
+  } catch (e) {
+    setLoading(false);
+    return e.response.data;
+  }
+};

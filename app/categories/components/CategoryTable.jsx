@@ -1,9 +1,11 @@
+"use client";
 import React, { useMemo, useState } from "react";
 import ReactPaginate from "react-paginate";
 import { usePagination, useSortBy, useTable } from "react-table";
 import Form from "react-bootstrap/Form";
 import { COLUMNS } from "./CategoryColumns";
 import AddCategory from "./AddCategory";
+import DeleteCategoryModal from "@/app/components/Modal/DeleteCategoryModal";
 
 const CategoryTable = ({
   data,
@@ -17,6 +19,7 @@ const CategoryTable = ({
   const columns = useMemo(() => COLUMNS, []);
   const [selected, setSelected] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const {
     getTableProps,
     getTableBodyProps,
@@ -31,6 +34,7 @@ const CategoryTable = ({
       data,
       setShowModal,
       setSelected,
+      setShowDeleteModal,
     },
     useSortBy,
     usePagination
@@ -202,15 +206,28 @@ const CategoryTable = ({
           </div>
         </div>
       </div>
-      <AddCategory
-        show={showModal}
-        setShow={setShowModal}
-        data={selected}
-        type={"Update"}
-        token={token}
-        updated={updated}
-        setUpdated={setUpdated}
-      />
+      {showModal && (
+        <AddCategory
+          show={showModal}
+          setShow={setShowModal}
+          data={selected}
+          type={"Update"}
+          token={token}
+          updated={updated}
+          setUpdated={setUpdated}
+        />
+      )}
+
+      {showDeleteModal && (
+        <DeleteCategoryModal
+          show={showDeleteModal}
+          setShow={setShowDeleteModal}
+          data={selected}
+          token={token}
+          updated={updated}
+          setUpdated={setUpdated}
+        />
+      )}
     </div>
   );
 };
