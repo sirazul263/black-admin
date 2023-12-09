@@ -1,9 +1,9 @@
-import { capitalizeFirstLetter } from "@/helpers/Functions";
 import { updateOrderStatus } from "@/services/orderServices";
 import { format } from "date-fns";
 import { useState } from "react";
 import { FaEdit } from "react-icons/fa";
 import { toast } from "react-toastify";
+import Invoice from "./Invoice";
 
 export const COLUMNS = [
   {
@@ -229,6 +229,18 @@ export const COLUMNS = [
   },
 
   {
+    Header: "Invoice",
+    Footer: "Invoice",
+    accessor: "item",
+    disableSortBy: true,
+    sticky: "left",
+    Cell: (props) => {
+      const data = props.row.original;
+      return <Invoice data={data} />;
+    },
+  },
+
+  {
     Header: "Status Action",
     Footer: "Status Action",
     accessor: "trip_request_id",
@@ -321,50 +333,5 @@ export const COLUMNS = [
         </div>
       );
     },
-  },
-];
-
-export const GROUPED_COLUMNS = [
-  {
-    Header: "Id",
-    Footer: "Id",
-    accessor: "id",
-  },
-  {
-    Header: "Name",
-    Footer: "Name",
-    columns: [
-      {
-        Header: "First Name",
-        Footer: "First Name",
-        accessor: "first_name",
-      },
-      {
-        Header: "Last Name",
-        Footer: "Last Name",
-        accessor: "last_name",
-      },
-    ],
-  },
-  {
-    Header: "Info",
-    Footer: "Info",
-    columns: [
-      {
-        Header: "Date of Birth",
-        Footer: "Date of Birth",
-        accessor: "date_of_birth",
-      },
-      {
-        Header: "Country",
-        Footer: "Country",
-        accessor: "country",
-      },
-      {
-        Header: "Phone",
-        Footer: "Phone",
-        accessor: "phone",
-      },
-    ],
   },
 ];

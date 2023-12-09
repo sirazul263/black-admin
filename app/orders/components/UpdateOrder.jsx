@@ -64,9 +64,38 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
   const [loading, setLoading] = useState(false);
   const sizes = ["XXL", "XL", "L", "M", "S", "XS"];
 
-  const products = data.order_items;
-
+  const [products, setProducts] = useState(data.order_items);
   const [showProduct, setShowProduct] = useState(false);
+
+  //Existing Order
+
+  const addProductToOrder = (item) => {
+    const selectedItem = products.find((order) => order.id === item.id);
+    const temp = [...products];
+    const index = products.indexOf(selectedItem);
+    const tempItem = { ...temp[index] };
+    tempItem.quantity = tempItem.quantity + 1;
+    temp[index] = tempItem;
+    setProducts(temp);
+  };
+
+  const removeItemFromOrder = (item) => {
+    const selectedItem = products.find((order) => order.id === item.id);
+    const temp = [...products];
+    const index = products.indexOf(selectedItem);
+    const tempItem = { ...temp[index] };
+    if (tempItem.quantity > 1) {
+      tempItem.quantity = tempItem.quantity - 1;
+      temp[index] = tempItem;
+      setProducts(temp);
+    } else {
+      setProducts(products.filter((order) => order.id !== item.id));
+    }
+  };
+
+  const deleteItemFromOrder = (item) => {
+    setProducts(products.filter((order) => order.id !== item.id));
+  };
 
   //Fetching Data
   const [result, setResult] = useState(null);
@@ -131,12 +160,29 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
         id: item.id,
         quantity: 1,
         price: item.offered_price,
+        image: item.image_urls[0],
       };
       setOrderItems([...orderItems, data]);
     }
   };
 
-  const removeItem = (item) => {};
+  const removeItem = (item) => {
+    const selectedItem = orderItems.find((order) => order.id === item.id);
+    const temp = [...orderItems];
+    const index = orderItems.indexOf(selectedItem);
+    const tempItem = { ...temp[index] };
+    if (tempItem.quantity > 1) {
+      tempItem.quantity = tempItem.quantity - 1;
+      temp[index] = tempItem;
+      setOrderItems(temp);
+    } else {
+      setOrderItems(orderItems.filter((order) => order.id !== item.id));
+    }
+  };
+
+  const deleteItem = (item) => {
+    setOrderItems(orderItems.filter((order) => order.id !== item.id));
+  };
 
   const getTotalItem = (item) => {
     const selectedItem = orderItems.find(
@@ -147,7 +193,6 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
     } else return 0;
   };
 
-  console.log(data);
   return (
     <div>
       <Offcanvas
@@ -200,6 +245,15 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
                             onChange={(e) => handleSearch(e.target.value)}
                             value={inputText}
                           />
+                        </div>
+                        <div className="d-flex justify-content-end mt-2">
+                          <button
+                            type="button"
+                            className="primary-btn fs-14 py-1 px-4"
+                            onClick={() => setShowProduct(false)}
+                          >
+                            Done
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -283,7 +337,6 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
                           </div>
                           <div className="col-2 d-flex align-items-center justify-content-between ps-0">
                             <div className="product-header fs-14">
-                              {" "}
                               ৳ {getTotalItem(item) * item.offered_price}
                             </div>
                           </div>
@@ -297,9 +350,9 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
               <div className="product-form  py-4 px-3">
                 <Formik
                   initialValues={{
-                    phone: data.delivery_information.phone,
-                    name: data.delivery_information.full_name,
-                    address: data.delivery_information.address,
+                    phone: data.delivery_information?.phone || "",
+                    name: data.delivery_information?.full_name || "",
+                    address: data.delivery_information?.address || "",
                     cod_fee: "",
                     total_amount: data.total_amount,
                     delivery_type: data.shipping_method.name,
@@ -395,21 +448,25 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
                               className="radius-8 bg-clr-ash  mb-2 p-2"
                             >
                               <div className="row fw-semi-bold   ">
-                                <div className="col-4 d-flex align-items-center">
+                                <div className="col-4 d-flex align-items-center ">
                                   <div>
                                     <img
-                                      src={item.image}
+                                      src={
+                                        item.product_variation.product
+                                          .image_urls[0]
+                                      }
                                       alt="Item"
                                       className="img-fluid"
+                                      style={{ maxHeight: 40, maxWidth: 40 }}
                                     />
                                   </div>
 
-                                  <p className="mb-0  ms-1 fs-12  ">
-                                    {item.name}
+                                  <p className="mb-0  ms-1 fs-12">
+                                    {item.product_variation.product.name}
                                   </p>
                                 </div>
                                 <div className="col-3 d-flex align-items-center justify-content-between product-header fs-14 ps-0 pe-3">
-                                  <div>
+                                  <div className="me-2">
                                     <select
                                       name="cars"
                                       id="cars"
@@ -422,12 +479,14 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
                                       }}
                                     >
                                       {sizes.map((size, i) => (
-                                        <option value="size">{size}</option>
+                                        <option value="size" key={i}>
+                                          {size}
+                                        </option>
                                       ))}
                                     </select>
                                   </div>
 
-                                  <div> ${item.price}</div>
+                                  <div> {item.price}</div>
                                 </div>
                                 <div className="col-3 d-flex align-items-center   px-0">
                                   <div
@@ -440,6 +499,7 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
                                     <button
                                       className="border-0 bg-transparent"
                                       type="button"
+                                      onClick={() => removeItemFromOrder(item)}
                                     >
                                       <AiOutlineMinus size={12} />
                                     </button>
@@ -449,6 +509,7 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
                                     <button
                                       className="border-0 bg-transparent"
                                       type="button"
+                                      onClick={() => addProductToOrder(item)}
                                     >
                                       <AiOutlinePlus size={12} />
                                     </button>
@@ -459,13 +520,109 @@ const UpdateOrder = ({ show, setShow, data, token }) => {
                                     {" "}
                                     ৳{item.quantity * item.price}
                                   </div>
-                                  <div className="cursor-pointer">
+                                  <div
+                                    className="cursor-pointer"
+                                    onClick={() => deleteItemFromOrder(item)}
+                                  >
                                     <RiDeleteBinLine size={14} />{" "}
                                   </div>
                                 </div>
                               </div>
                             </div>
                           ))}
+                          {orderItems.length > 0 && (
+                            <div>
+                              <p className="fw-bold fs-14"> New Added Items</p>
+                              {orderItems.map((item, i) => (
+                                <div
+                                  key={i}
+                                  className="radius-8 bg-clr-ash  mb-2 p-2"
+                                >
+                                  <div className="row fw-semi-bold   ">
+                                    <div className="col-4 d-flex align-items-center">
+                                      <div>
+                                        <img
+                                          src={item.image}
+                                          alt="Item"
+                                          className="img-fluid"
+                                          style={{
+                                            maxHeight: 40,
+                                            maxWidth: 40,
+                                          }}
+                                        />
+                                      </div>
+
+                                      <p className="mb-0  ms-1 fs-12  ">
+                                        {item.name}
+                                      </p>
+                                    </div>
+                                    <div className="col-3 d-flex align-items-center justify-content-between product-header fs-14 ps-0 pe-3">
+                                      <div className="me-2">
+                                        <select
+                                          name="cars"
+                                          id="cars"
+                                          style={{
+                                            width: 55,
+                                            height: 25,
+                                            borderRadius: 8,
+                                            padding: 4,
+                                            fontSize: 14,
+                                          }}
+                                        >
+                                          {sizes.map((size, i) => (
+                                            <option value="size" key={i}>
+                                              {size}
+                                            </option>
+                                          ))}
+                                        </select>
+                                      </div>
+
+                                      <div> {item.price}</div>
+                                    </div>
+                                    <div className="col-3 d-flex align-items-center   px-0">
+                                      <div
+                                        className="radius-8  bg-white d-flex justify-content-between align-items-center"
+                                        style={{
+                                          border: "1px solid #ccc",
+                                          padding: "2px 3px",
+                                        }}
+                                      >
+                                        <button
+                                          className="border-0 bg-transparent"
+                                          type="button"
+                                          onClick={() => removeItem(item)}
+                                        >
+                                          <AiOutlineMinus size={12} />
+                                        </button>
+                                        <div className="px-md-3 px-1 fs-13 pt-1">
+                                          {item.quantity}
+                                        </div>
+                                        <button
+                                          className="border-0 bg-transparent"
+                                          type="button"
+                                          onClick={() => addItem(item)}
+                                        >
+                                          <AiOutlinePlus size={12} />
+                                        </button>
+                                      </div>
+                                    </div>
+                                    <div className="col-2 d-flex align-items-center justify-content-between ps-0">
+                                      <div className="product-header fs-14">
+                                        {" "}
+                                        ৳{item.quantity * item.price}
+                                      </div>
+                                      <div
+                                        className="cursor-pointer"
+                                        onClick={() => deleteItem(item)}
+                                      >
+                                        <RiDeleteBinLine size={14} />{" "}
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              ))}
+                            </div>
+                          )}
                           <button
                             className="primary-btn  fs-14 is-radius-5 border-0  mt-3 w-100  mb-2"
                             type="button"
